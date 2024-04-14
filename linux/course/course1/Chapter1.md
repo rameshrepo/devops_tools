@@ -6,6 +6,17 @@
 - Use grep to identify lines in files which contain certain strings.
 - Use sed to edit files in a streaming fashion.
 
+## Table of Contents
+<div id="user-content-toc">
+  <ul>
+    <li><a href="#listing-creating-deleting-and-renaming-files-and-directories">Listing, Creating, Deleting and Renaming Files and Directories</a></li>
+    <li><a href="#finding-files-find">Finding Files: find</a></li>
+    <li><a href="#finding-files-grep">Finding Files: grep</a></li>
+    <li><a href="#string-substitution-sed">String Substitution: sed</a></li>
+  </ul>
+</div>
+
+
 ## Listing, Creating, Deleting and Renaming Files and Directories
 
 <img src="./images/chapter1_1.png"/>
