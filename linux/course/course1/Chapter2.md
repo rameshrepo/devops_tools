@@ -55,3 +55,11 @@ Display the last 15 lines of somefile.log, use the following command: ```$ tail 
 **To continually monitor new output in a growing log file: ```$ tail -f somefile.log```**
 This command will continuously display any new lines of output in atmtrans.log as soon as they appear.
 
+## Viewing Compressed files
+
+These associated utilities have the letter "z" prefixed to their name. For example, we have utility programs such as zcat, zless, zdiff and zgrep
+
+<img src="./images/chapter2_3.png"/>
+
+Note that if you run zless on an uncompressed file, it will still work and ignore the decompression stage. There are also equivalent utility programs for other compression methods besides gzip, for example, we have bzcat and bzless associated with bzip2, and xzcat and xzless associated with xz.
+
