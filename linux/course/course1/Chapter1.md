@@ -109,3 +109,27 @@ s/frog/toad/g
 
 $ sed -f scriptfile < file > newfile
 ```
+
+## More Examples
+
+## find
+
+```$ find /tmp -newer /tmp/tstfile -ls``` : Find all files under the /tmp directory that are newer than an already existing file and give a detailed listing
+
+```$ find /etc -name "*.conf"```: Find all files under the /tmp directory that have a suffix of .conf
+
+```$ find / -name "*.bak" -exec rm {} ';'```: Find all backup files on the system (ending in .bak ) and delete them
+
+### grep
+
+```$ grep ftp /etc/services```: Find all entries in /etc/services that include the string ftp
+
+```$ grep ftp /etc/services | grep tcp```: Restrict to those that use the tcp protocol
+
+```$ grep -n ftp /etc/services | grep -v tcp```: Those that do not use the tcp protocol
+
+```$ grep 'ˆts' /etc/services```: Get all strings that start with ts
+
+```$ grep 'st$' /etc/services```: Get all strings that end with st
+
+
