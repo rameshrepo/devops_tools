@@ -24,7 +24,9 @@ $ find [location] [criteria] [actions]
 - If no actions are given, only a listing of the names is shown.
 
 ```$ find /etc -name "*.conf"``` : Print out the names of all files in the /etc directory and its descendants, recursively, that end in .conf.
+
 ```$ find /etc -name "*.conf" -ls``` : Print out a long listing, not just the names.
+
 ```$ find /tmp /etc -name "*.conf" -or -newer /tmp/.X0-lock -ls``` : look in subdirectories under /etc and /tmp for files that are either ending in .conf or are newer than /tmp/.X0-lock, and print out a long listing.
 
 
@@ -56,9 +58,43 @@ pig food
 ```$ grep -i -e pig -e dog -r .``` : search all files in the current directory and those below it for the strings pig or dog, ignoring case.
 
 ```$ grep "^dog" file ``` : print all lines that start with "dog"
+
 ```$ grep "dog$" file ``` : print all lines that end with "dog"
+
 ```$ grep d[a-p] file ``` : print all lines with a d followed by a character from a to p
 
 <img src="./images/chapter1_2.png"/>
 
 
+## String Substitution: sed
+
+sed (stream editor) is to make substitutions and other modifications in files and in streamed output.
+
+Any of the following methods will change all first instances of the string pig with cow for each line of file and put the results in newfile:
+```
+$ sed s/pig/cow/ file > newfile
+$ sed s/pig/cow/ < file > newfile
+$ cat file | sed s/pig/cow/ > newfile
+```
+where the s stands for substitute. If you want to change all instances, you have to add the g (global) qualifier like ```$ sed s/pig/cow/g file > newfile```
+
+Some of the complications come in when you want to use special characters in the strings to be searched for or inserted. For example, suppose you want to replace all back slashes with forward slashes: ```$ sed s/'\\'/'\/'/g file > newfile```
+
+If you want to make multiple simultaneous substitutions, you need to use the -e option, as in:```$ sed -e s/"pig"/"cow"/g -e s/"dog"/"cat"/g < file > newfile```
+
+You can work directly on streams generated from commands, as in:
+```
+$ echo hello | sed s/"hello"/"goodbye"/g
+Output: goodbye
+```
+
+If you have a lot of commands, you can put them in a file and apply with the **-f option**, as in:
+
+```
+$ cat scriptfile
+s/pig/cow/g
+s/dog/cat/g
+s/frog/toad/g
+
+$ sed -f scriptfile < file > newfile
+```
