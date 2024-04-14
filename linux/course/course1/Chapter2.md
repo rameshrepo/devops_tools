@@ -63,3 +63,17 @@ These associated utilities have the letter "z" prefixed to their name. For examp
 
 Note that if you run zless on an uncompressed file, it will still work and ignore the decompression stage. There are also equivalent utility programs for other compression methods besides gzip, for example, we have bzcat and bzless associated with bzip2, and xzcat and xzless associated with xz.
 
+## Text Manipulation - sed
+
+sed is used to modify the contents of a file or input stream, usually placing the contents into a new file or output stream. Its name is an abbreviation for stream editor.
+
+**sed can filter text, as well as perform substitutions in data streams.**
+
+Data from an input source/file (or stream) is taken and moved to a working space. The entire list of operations/modifications is applied over the data in the working space and the final contents are moved to the standard output space (or stream).
+
+<img src="./images/chapter2_4.png"/>
+
+The -e option allows you to specify multiple editing commands simultaneously at the command line. It is unnecessary if you only have one operation invoked.
+
+<img src="./images/chapter2_5.png"/>
+
