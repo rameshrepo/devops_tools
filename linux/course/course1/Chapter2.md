@@ -77,3 +77,39 @@ The -e option allows you to specify multiple editing commands simultaneously at 
 
 <img src="./images/chapter2_5.png"/>
 
+
+<img src="./images/chapter2_6.png"/>
+
+**You must use the -i option with care, because the action is not reversible.**
+
+It is always safer to use sed without the –i option and then replace the file yourself, as shown in the following example: ```$ sed s/pattern/replace_string/g file1 > file2```
+
+The above command will replace all occurrences of pattern with replace_string in file1 and move the contents to file2. The contents of file2 can be viewed with cat file2. If you approve, you can then overwrite the original file with mv file2 file1.
+
+```
+Example: To convert 01/02/… to JAN/FEB/…
+sed -e 's/01/JAN/' -e 's/02/FEB/' -e 's/03/MAR/' -e 's/04/APR/' -e 's/05/MAY/' \
+    -e 's/06/JUN/' -e 's/07/JUL/' -e 's/08/AUG/' -e 's/09/SEP/' -e 's/10/OCT/' \
+    -e 's/11/NOV/' -e 's/12/DEC/'
+```
+
+## Text Manipulation - awk
+awk is used to extract and then print specific contents of a file. sed derived its name from the last names of its authors: Alfred Aho, Peter Weinberger, and Brian Kernighan.
+
+awk has the following features:
+- It is a powerful utility and interpreted programming language.
+- It is used to manipulate data files, retrieving, and processing text.
+- It works well with fields (containing a single piece of data, essentially a column) and records (a collection of fields, essentially a line in a file).
+
+<img src="./images/chapter2_7.png"/>
+
+As with sed, short awk commands can be specified directly at the command line, but a more complex script can be saved in a file that you can specify using the -f option:
+
+<img src="./images/chapter2_8.png"/>
+
+awk basis:
+The table explains the basic tasks that can be performed using awk. **The input file is read one line at a time, and, for each line, awk matches the given pattern in the given order and performs the requested action.** The -F option allows you to specify a particular field separator character. For example, the /etc/passwd file uses ":" to separate the fields, so the -F: option is used with the /etc/passwd file.
+
+**The command/action in awk needs to be surrounded with apostrophes (or single-quote (')).** 
+
+<img src="./images/chapter2_9.png"/>
