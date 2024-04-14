@@ -1,0 +1,3 @@
+22fa7542a9c378d837d6d9fc65be19eb  LFD108x_V2022-01-19_SOLUTIONS.tar.xz
+b145da0594ccd848f51651be76bbb25e  Preparing_Your_Computer.pdf
+8a4beae69a3993452c64e07502b1ebad  ready-for.sh
