@@ -94,7 +94,7 @@ sed -e 's/01/JAN/' -e 's/02/FEB/' -e 's/03/MAR/' -e 's/04/APR/' -e 's/05/MAY/' \
 ```
 
 ## Text Manipulation - awk
-awk is used to extract and then print specific contents of a file. sed derived its name from the last names of its authors: Alfred Aho, Peter Weinberger, and Brian Kernighan.
+awk is used to extract and then print specific contents of a file. awk derived its name from the last names of its authors: Alfred Aho, Peter Weinberger, and Brian Kernighan.
 
 awk has the following features:
 - It is a powerful utility and interpreted programming language.
@@ -148,3 +148,126 @@ $ wc -l american-english
 $ split american-english dictionary
 will split the American-English file into 100 equal-sized segments named dictionaryxx. 
 ```
+
+<img src="./images/chapter2_15.png"/>
+
+## paste
+
+Suppose you have a file that contains the full name of all employees and another file that lists their phone numbers and Employee IDs. You want to create a new file that contains all the data listed in three columns: name, employee ID, and phone number. 
+
+paste can be used to create a single file containing all three columns. 
+
+paste accepts the following options:
+
+- -d delimiters, which specify a list of delimiters to be used instead of tabs for separating consecutive values on a single line. Each delimiter is used in turn; when the list has been exhausted, paste begins again at the first delimiter.
+- -s, which causes paste to append the data in series rather than in parallel; that is, in a horizontal rather than vertical fashion.
+
+
+To paste contents from two files one can do: ```$ paste file1 file2```
+The syntax to use a different delimiter is as follows: ```$ paste -d, file1 file2```. Common delimiters are 'space', 'tab', '|', 'comma', etc.
+
+<img src="./images/chapter2_13.png"/>
+
+Let us consider three files having name state, capital and number. state and capital file contains 5 names of the Indian states and capitals respectively. number file contains 5 numbers.
+
+```
+$ cat state
+Arunachal Pradesh
+Assam
+Andhra Pradesh
+Bihar
+Chhattisgrah
+
+$ cat capital
+Itanagar
+Dispur
+Hyderabad
+Patna
+Raipur
+
+$ cat numbers
+1
+2
+3
+4
+5
+
+$ paste number state capital
+1       Arunachal Pradesh       Itanagar
+2       Assam   Dispur
+3       Andhra Pradesh  Hyderabad
+4       Bihar   Patna
+5       Chhattisgrah    Raipur
+```
+
+Using delimiters:
+
+```
+# Only one character is specified
+$ paste -d "|" number state capital
+1|Arunachal Pradesh|Itanagar
+2|Assam|Dispur
+3|Andhra Pradesh|Hyderabad
+4|Bihar|Patna
+5|Chhattisgrah|Raipur
+
+# More than one character is specified
+$ paste -d "|," number state capital
+1|Arunachal Pradesh,Itanagar
+2|Assam,Dispur
+3|Andhra Pradesh,Hyderabad
+4|Bihar,Patna
+5|Chhattisgrah,Raipur
+
+# First and second file is separated by '|' and second and third is separated by ','. After that list is exhausted and reused.
+
+```
+
+Using Serial:
+-s (serial): We can merge the files in sequentially manner using the -s option. It reads all the lines from a single file and merges all these lines into a single line with each line separated by tab.
+
+```
+$ paste -s number state capital
+1       2       3       4       5
+Arunachal Pradesh       Assam   Andhra Pradesh  Bihar   Chhattisgrah
+Itanagar        Dispur  Hyderabad       Patna   Raipur
+
+# Combination of -d and -s
+$ paste -s -d ":" number state capital
+1:2:3:4:5
+Arunachal Pradesh:Assam:Andhra Pradesh:Bihar:Chhattisgrah
+Itanagar:Dispur:Hyderabad:Patna:Raipur
+```
+
+Combining N consecutive lines: The paste command can also be used to merge N consecutive lines from a file into a single line. Here N can be specified by specifying number hyphens(-) 
+
+```
+# With 2 Hyphens
+$ cat capital | paste - -
+Itanagar        Dispur
+Hyderabad       Patna
+Raipur
+
+# With 3 Hyphens
+$ cat capital | paste - - -
+Itanagar        Dispur  Hyderabad
+Patna   Raipur
+```
+
+Reference: https://www.geeksforgeeks.org/paste-command-in-linux-with-examples/
+
+## join
+
+To combine two files on a common field, at the command prompt type ```join file1 file2```
+
+<img src="./images/chapter2_14.png"/>
+
+## Regular Expressions and Search Patterns
+
+Regular expressions are text strings used for matching a specific pattern, or to search for a specific location, such as the start or end of a line or a word.
+
+<img src="./images/chapter2_16.png"/>
+
+Example: **the quick brown fox jumped over the lazy dog**
+
+<img src="./images/chapter2_17.png"/>
