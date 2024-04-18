@@ -113,3 +113,38 @@ The table explains the basic tasks that can be performed using awk. **The input 
 **The command/action in awk needs to be surrounded with apostrophes (or single-quote (')).** 
 
 <img src="./images/chapter2_9.png"/>
+
+## sort
+
+sort is used to rearrange the lines of a text file, in either ascending or descending order according to a sort key. You can also sort with respect to particular fields (columns) in a file. 
+
+<img src="./images/chapter2_10.png"/>
+
+When used with the -u option, sort checks for unique values after sorting the records (lines).
+<img src="./images/chapter2_11.png"/>
+
+uniq removes duplicate consecutive lines in a text file and is useful for simplifying the text display.
+
+Because uniq requires that the duplicate entries must be consecutive, one often runs sort first and then pipes the output into uniq; if sort is used with the -u option, it can do all this in one step.
+
+To remove duplicate entries from multiple files at once, use the following command:
+```sort file1 file2 | uniq > file3``` (or) ```sort -u file1 file2 > file3```
+
+To count the number of duplicate entries, use the following command:```uniq -c filename```
+
+## split
+
+By default, split breaks up a file into 1000-line segments. The original file remains unchanged, and a set of new files with the same name plus an added prefix is created. By default, the x prefix is added.
+
+To split a file into segments using a different prefix, use the command ```split infile <Prefix>```
+
+<img src="./images/chapter2_12.png"/>
+
+```
+$ wc -l american-english
+99171 american-english
+
+
+$ split american-english dictionary
+will split the American-English file into 100 equal-sized segments named dictionaryxx. 
+```
