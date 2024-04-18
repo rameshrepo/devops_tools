@@ -114,6 +114,24 @@ The table explains the basic tasks that can be performed using awk. **The input 
 
 <img src="./images/chapter2_9.png"/>
 
+Generate a column containing a unique list of all the shells used for users in /etc/passwd
+The field in /etc/passwd that holds the shell is #7.
+To display the field holding the shell in /etc/passwd using awk and produce a unique list:
+
+```
+$ awk -F: '{print $7}' /etc/passwd | sort -u
+or
+$ awk -F: '{print $7}' /etc/passwd | sort | uniq
+
+For example: $ awk -F: '{print $7}' /etc/passwd | sort -u
+
+/bin/bash
+/bin/sync
+/sbin/halt
+/sbin/nologin
+/sbin/shutdown
+```
+
 ## sort
 
 sort is used to rearrange the lines of a text file, in either ascending or descending order according to a sort key. You can also sort with respect to particular fields (columns) in a file. 
@@ -297,4 +315,44 @@ The items in the square brackets are optional. **tr requires at least one argume
 For example, suppose you have a file named city containing several lines of text in mixed case. ```cat city | tr a-z A-Z```
 
 <img src="./images/chapter2_20.png"/>
+
+## tee
+
+tees the output stream from the command: one stream is displayed on the standard output and the other is saved to a file.
+
+For example, to list the contents of a directory on the screen and save the output to a file, at the command prompt type ```ls -l | tee newfile```
+
+<img src="./images/chapter2_21.png"/>
+
+The tee utility is very useful for saving a copy of your output while you are watching it generated: ```$ ls -l /etc | tee /tmp/ls-output```
+
+## wc
+
+wc (word count) counts the number of lines, words, and characters in a file or list of files. 
+
+<img src="./images/chapter2_22.png"/>
+
+**By default, all three of these options are active.**
+
+Find out how many lines, words, and characters there are in all files in /var/log that have the .log extension.
+```
+$ sudo wc /var/log/*.log
+376     2675   21570 /var/log/boot.log
+805     4988  126977 /var/log/dnf.librepo.log
+8839   71774  760826 /var/log/dnf.log
+7164   32605  516106 /var/log/dnf.rpm.log
+1          6      60 /var/log/hawkey.log
+30       265    3195 /var/log/kdump.log
+3         15     102 /var/log/vbox-setup.log
+544     5836   42262 /var/log/Xorg.9.log
+17762 118164 1471098 total
+```
+
+## cut
+
+cut is used for manipulating column-based files and is designed to extract specific columns. The default column separator is the tab character. A different delimiter can be given as a command option.
+
+For example, to display the third column delimited by a blank space, at the command prompt type ls -l | cut -d" " -f3 and press the Enter key.
+
+<img src="./images/chapter2_23.png"/>
 
