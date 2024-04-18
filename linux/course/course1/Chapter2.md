@@ -271,3 +271,30 @@ Regular expressions are text strings used for matching a specific pattern, or to
 Example: **the quick brown fox jumped over the lazy dog**
 
 <img src="./images/chapter2_17.png"/>
+
+## grep
+
+grep is extensively used as a primary text searching tool. It scans files for specified patterns and can be used with regular expressions, as well as simple strings
+
+<img src="./images/chapter2_18.png"/>
+
+## strings
+
+strings is used to extract all printable character strings found in the file or files given as arguments. It is useful in locating human-readable content embedded in binary files.
+
+For example, to search for the string my_string in a spreadsheet: ```$ strings book1.xls | grep my_string```
+
+<img src="./images/chapter2_19.png"/>
+
+## tr
+
+The tr utility is used to translate specified characters into other characters or to delete them. 
+
+```$ tr [options] set1 [set2]```
+
+The items in the square brackets are optional. **tr requires at least one argument and accepts a maximum of two.** The first, designated set1 in the example, lists the characters in the text to be replaced or removed. The second, set2, lists the characters that are to be substituted for the characters listed in the first argument. 
+
+For example, suppose you have a file named city containing several lines of text in mixed case. ```cat city | tr a-z A-Z```
+
+<img src="./images/chapter2_20.png"/>
+
