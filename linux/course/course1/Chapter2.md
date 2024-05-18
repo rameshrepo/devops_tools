@@ -396,3 +396,94 @@ For example, to display the third column delimited by a blank space, at the comm
 
 <img src="./images/chapter2_23.png"/>
 
+## Lab Exercises
+
+### Excerise 1
+
+Execute a command such as doing a directory listing of the /etc directory: ```$ ls -l /etc```
+while both saving the output in a file and displaying it at your terminal.
+
+Solution: ```$ ls -l /etc | tee /tmp/ls-output```
+
+### Excerise 2
+
+You may need to consult the manual page for /etc/passwd as in: ```$ man 5 passwd```
+Which field in /etc/passwd holds the account’s default shell (user command interpreter)?
+How do you make a list of unique entries (with no repeats)?
+
+Solution: 
+The field in /etc/passwd that holds the shell is #7.
+
+To display the field holding the shell in /etc/passwd using awk and produce a unique list:
+```
+$ awk -F: '{print $7}' /etc/passwd | sort -u
+or
+$ awk -F: '{print $7}' /etc/passwd | sort | uniq
+```
+
+For example:
+```
+$ awk -F: '{print $7}' /etc/passwd | sort -u
+
+/bin/bash
+/bin/sync
+/sbin/halt
+/sbin/nologin
+/sbin/shutdown
+```
+
+### Exercise 3
+
+Find out how many lines, words, and characters there are in all files in /var/log that have the .log extension.
+
+Solution:
+```
+$ sudo wc /var/log/*.log
+
+376     2675   21570 /var/log/boot.log
+805     4988  126977 /var/log/dnf.librepo.log
+8839   71774  760826 /var/log/dnf.log
+7164   32605  516106 /var/log/dnf.rpm.log
+1          6      60 /var/log/hawkey.log
+30       265    3195 /var/log/kdump.log
+3         15     102 /var/log/vbox-setup.log
+544     5836   42262 /var/log/Xorg.9.log
+17762 118164 1471098 total
+```
+
+### Exercise 4
+
+Search for all instances of the user command interpreter (shell) equal to /sbin/nologin in /etc/passwd and replace them with /bin/bash using sed. Do not overwrite /etc/passwd!
+
+Solution: 
+To get output on standard out (terminal screen): ```$ sed s/'\/sbin\/nologin'/'\/bin\/bash'/g /etc/passwd```
+or to direct to a file:```$ sed s/'\/sbin\/nologin'/'\/bin\/bash'/g /etc/passwd > passwd_new```
+
+Note: This is can be difficult and obscure because we are trying to use the forward slash (/) as both a string and a delimiter between fields.
+
+One can do this instead:```$ sed s:'/sbin/nologin':'/bin/bash':g /etc/passwd```
+
+where we have used the colon (:) as the delimiter instead. (You are free to choose your delimiting character!) In fact, when doing this, we don’t even need the single quotes:```$ sed s:/sbin/nologin:/bin/bash:g /etc/passwd```
+
+This will work just fine.
+
+### Exercise 5
+
+Using grep
+
+- Find all entries in /etc/services that include the string ftp.
+- Restrict to those that use the tcp protocol.
+- Now restrict to those that do not use the tcp protocol while printing out the line number.
+- Get all strings that start with ts or end with st.
+
+Solution:
+```
+$ grep ftp /etc/services
+
+$ grep ftp /etc/services | grep tcp
+
+$ grep -n ftp /etc/services | grep -v tcp
+
+$ grep ˆts /etc/services
+$ grep st$ /etc/services
+```
