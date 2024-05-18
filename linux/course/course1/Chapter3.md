@@ -28,8 +28,8 @@ Note: You should often enclose these variables in double quotes, i.e. you should
 Inside the script, the **command shift n shifts the arguments n times (to the left).**
 
 There are two ways to include a script file inside another script:
-- . file
-- source file
+- ```. file```
+- ```source file```
 
 There is a number of options that can be used for debugging purposes:
 - **set -n (bash -n)** just checks for syntax
@@ -40,7 +40,9 @@ There is a number of options that can be used for debugging purposes:
 where the set command is used inside the script (with a + sign behavior is reversed) and the second form, giving an option to ​bash, is invoked when running the script from the command line.
 
 ### NoClobber
+
 Turn on NoClobber option: ```set -o noclobber```
+
 Disable NoClobber option: ```set +o noclobber```
 
 NoClobber is an option that we can use to disallow an operation to overwriting any existing files.

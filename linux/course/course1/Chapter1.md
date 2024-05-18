@@ -54,9 +54,13 @@ It is generally a disfavored practice to utilize such file names in UNIX-like op
 
 **​There are many options to find especially as regarding selection of files to display. This can be done based on size, time of creation or access, type of file, owner, etc.**
 
+A quick synopsis can be provided by find --help:
+
+<img src="./images/chapter1_3.png"/>
+
 ## Finding Files: grep
 
-grep (stands for global regular expression print), is a workhorse command line utility whose basic job is to search files for patterns and print out matches according to specified options. grep can work with more complicated regular expressions which can contain wildcards and other special attributes.
+grep (stands for global regular expression print), is a workhorse command line utility whose basic job is to **search files for patterns and print out matches according to specified options**. grep can work with more complicated regular expressions which can contain wildcards and other special attributes.
 
 ```
 $ grep pig file
@@ -79,7 +83,7 @@ pig food
 
 ## String Substitution: sed
 
-sed (stream editor) is to make substitutions and other modifications in files and in streamed output.
+sed (stream editor) is to **make substitutions and other modifications in files and in streamed output**.
 
 Any of the following methods will change all first instances of the string pig with cow for each line of file and put the results in newfile:
 ```
