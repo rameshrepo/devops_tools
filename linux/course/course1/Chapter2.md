@@ -29,6 +29,25 @@ This command creates a new file and waits for the user to edit/enter the text. A
 
 Another way to create a file at the terminal is **cat > <filename> << EOF**. A new file is created and you can type the required input. To exit, **enter EOF at the beginning of a line.**. Note, One can also use another word, such as STOP instead of EOF
 
+If you wnat to combine two files, I can say ```cat file1.txt file2.txt```, and I see it combined, or I could send it into a third file, file3.txt ('> file3.txt') ```cat file1.txt file2.txt > file3.txt```
+
+## echo
+
+echo simply displays (echoes) text. It is used simply, as in: ```$ echo string```
+
+echo can be used to display a string on standard output (i.e. the terminal) or to place in a new file (using the > operator) or append to an already existing file (using the >> operator).
+
+The **–e** option, along with the following switches, is used to enable special character sequences, such as the newline character or horizontal tab:
+- **\n** represents newline
+- **\t** represents horizontal tab.
+
+echo is particularly useful for viewing the values of environment variables (built-in shell variables). For example, **echo $USERNAME** will print the name of the user who has logged into the current terminal.
+
+The following table lists echo commands and their usage:
+
+<img src="./images/chapter2_21.png"/>
+
+
 ## Working with Large Files
 
 ### less
@@ -61,7 +80,7 @@ These associated utilities have the letter "z" prefixed to their name. For examp
 
 <img src="./images/chapter2_3.png"/>
 
-Note that if you run zless on an uncompressed file, it will still work and ignore the decompression stage. There are also equivalent utility programs for other compression methods besides gzip, for example, we have bzcat and bzless associated with bzip2, and xzcat and xzless associated with xz.
+Note that if you run **zless on an uncompressed file, it will still work and ignore the decompression stage**. There are also equivalent utility programs for other compression methods besides gzip, for example, we have bzcat and bzless associated with bzip2, and xzcat and xzless associated with xz.
 
 ## Text Manipulation - sed
 
@@ -138,7 +157,7 @@ sort is used to rearrange the lines of a text file, in either ascending or desce
 
 <img src="./images/chapter2_10.png"/>
 
-When used with the -u option, sort checks for unique values after sorting the records (lines).
+When used with the **-u option, sort checks for unique values** after sorting the records (lines).
 <img src="./images/chapter2_11.png"/>
 
 uniq removes duplicate consecutive lines in a text file and is useful for simplifying the text display.
@@ -276,9 +295,30 @@ Reference: https://www.geeksforgeeks.org/paste-command-in-linux-with-examples/
 
 ## join
 
+join, is essentially an enhanced version of paste. It first checks whether the files share common fields, such as names or phone numbers, and then joins the lines in two files based on a common field.
+
 To combine two files on a common field, at the command prompt type ```join file1 file2```
 
 <img src="./images/chapter2_14.png"/>
+
+## split
+
+By default, split breaks up a file into 1000-line segments. The original file remains unchanged, and a set of new files with the same name plus an added prefix is created. By default, the x prefix is added. 
+
+To split a file into segments using a different prefix, use the command ```split infile <Prefix>```.
+<img src="./images/chapter2_25.png"/>
+
+We will apply split to an American-English dictionary file of over 99,000 lines:
+```
+$ wc -l american-english
+99171 american-english
+```
+where we have used wc (word count, soon to be discussed) to report on the number of lines in the file. Then, typing: ```$ split american-english dictionary```
+will split the American-English file into 100 equal-sized segments named dictionaryxx
+
+<img src="./images/chapter2_26.png"/>
+
+
 
 ## Regular Expressions and Search Patterns
 
