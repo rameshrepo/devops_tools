@@ -11,7 +11,7 @@
 
 A script say my_script.sh can be invoked in either of two ways:
 
-- Typing bash my_script.sh
+- Typing ```bash my_script.sh```
 - Have the first line of my_script.sh be **#!/bin/sh**. Note this will work with any other interpreter such as csh, perl, etc. This is an exception to the rule that the character # is used to demark comments. Then, make the script executable by doing **chmod +x my_script.sh**, and then just run **./my_script.sh**.
 
 Special environment variables that can be used inside a script:
@@ -138,6 +138,65 @@ esac
 exit 0
 ```
 
- 
+## Loops
 
+### for
+
+```
+$ for file in $(find . -name "*.o")
+do
+    echo "I am removing file: $file"
+    rm -f "$file"
+done
+```
+
+​which is equivalent to: ```​$ find . -name "*.o" -exec rm {} ';'``` or ```$ find . -name "*.o" | xargs rm```
+showing use of the xargs utility.
+
+### while
+
+```
+#!/bin/sh
+
+ntry_max=4 ; ntry=0 ; password=' '
+
+while [[ $ntry -lt $ntry_max ]] ; do
+
+   ntry=$(( $ntry + 1 ))
+   echo -n 'Give password:  '
+   read password
+   if  [[ $password == "linux" ]] ; then
+       echo "Congratulations: You gave the right password on try $ntry!"
+       exit 0
+   fi
+   echo "You failed on try $ntry; try again!"
+
+done
+
+echo "you failed $ntry_max times; giving up"
+exit -1
+```
+
+### until
+```
+#!/bin/sh
+
+ntry_max=4 ; ntry=0 ; password=' '
+
+until [[ $ntry -ge $ntry_max ]] ; do
+
+   ntry=$(( $ntry + 1 ))
+   echo -n 'Give password:  '
+   read password
+   if [[ $password == "linux" ]] ; then
+       echo "Congratulations: You gave the right password on try $ntry!"
+       exit 0
+   fi
+   echo "You failed on try $ntry; try again!"
+
+done
+
+echo "you failed $ntry_max times; giving up"
+exit -1
+```
 
