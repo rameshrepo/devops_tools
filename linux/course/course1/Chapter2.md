@@ -47,6 +47,8 @@ The following table lists echo commands and their usage:
 
 <img src="./images/chapter2_21.png"/>
 
+Reference: https://www.shellscript.sh/echo.html
+https://www.geeksforgeeks.org/echo-command-in-linux-with-examples/
 
 ## Working with Large Files
 

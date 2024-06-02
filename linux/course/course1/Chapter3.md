@@ -82,6 +82,10 @@ The condition can be expressed in several equivalent ways:
 - ```if test -f file.c ; then ... ; fi```
 ​Note: Remember to put spaces around the [ ] brackets. Also, The first form with **double brackets is preferred over the second form with single brackets** which is now considered deprecated
 
+if [ $VAR == "" ] will produce a syntax error if VAR is empty, so you have to do:
+​if [ "$VAR" == "" ] to avoid this.
+
+The test form is also deprecated for the same reason, and it is more clumsy as well. However, it is common to see these older conditional forms in many legacy scripts.
 
 You will often see the ```&& and || operators (AND and OR, as in C)``` used in a compact shorthand:
 ```
@@ -105,5 +109,35 @@ Doing **man 1 test** will enumerate these tests.
 
 <img src="./images/chapter3_1.png"/>
 
+## String and Arithmetic Comparisons
+
+If you use single square brackets or the test syntax, be sure to enclose environment variables in quotes in the following:
+<img src="./images/chapter3_2.png"/>
+
+Arithmetic comparisons take the form:​ ```exp1 -op exp2```
+where the operation (-op) can be:```-eq, -ne, -gt, -ge, -lt, -le```
+
+## case
+
+This construct is similar to the switch construct used in C code. For example:
+
+```
+#!/bin/sh
+
+echo "Do you want to destroy your entire file system?"
+read response
+
+case "$response" in
+"yes") echo "I hope you know what you are doing!" ;;
+"no" ) echo "You have some comon sense!" ;;
+"y" | "Y" | "YES" ) echo "I hope you know what you are doing!" ;
+echo 'I am going to type: " rm -rf /"';;
+"n" | "N" | "NO" ) echo "You have some comon sense!" ;;
+* ) echo "You have to give an answer!" ;;
+esac
+exit 0
+```
+
+ 
 
 
