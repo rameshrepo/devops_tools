@@ -200,3 +200,256 @@ echo "you failed $ntry_max times; giving up"
 exit -1
 ```
 
+## Functions
+
+bash permits use of subprograms or functions. Alternatively, one script can call another script, but this can make passing information a little more complex, and increases the number of files. Proper use of functions can make scripts much simpler.
+
+The basic form of a function is:
+```
+fun_foobar(){
+statements
+}
+```
+
+Few Things to Note. The above function declaration which will not look strange to any C programmer.
+- No arguments are enclosed in the parentheses.
+- Functions must always be defined before they are used, because scripts are interpreted, not compiled
+- Functions leave positional arguments unchanged, but can reset other variables. A ```local var1 var2...``` statement can make variables local.
+
+
+For example:
+
+```
+​#!/bin/sh
+
+test_fun1(){
+var=FUN_VAR
+shift
+echo " PARS after fun shift: $0 $1 $2 $3 $4 $5"
+}
+
+var=MAIN_VAR
+echo ' '
+echo "BEFORE FUN MAIN, VAR=$var"
+echo " PARS starting in main: $0 $1 $2 $3 $4 $5"
+
+test_fun1 "$@"
+echo " PARS after fun in main: $0 $1 $2 $3 $4 $5"
+echo "AFTER FUN MAIN, VAR=$var"
+
+exit 0
+```
+
+
+Sometimes, you will see an older method of declaring functions, which explicitly includes a function keyword, as in:
+
+```
+function fun_foobar(){
+statements
+}
+```
+or
+
+```
+function fun_foobar{
+statements
+}
+```
+without the parentheses.
+
+This syntax will work fine in bash scripts, but is not designed for the original Bourne shell, sh.
+In the case where a function name is used, which collides with an alias, this method will still work.
+In most cases, **the function keyword is not often present in new scripts.**
+
+## Lab 3.1. Creating Simple Bash Shell Scripts
+
+In the Labs directory (or anywhere you choose), create the following file in your favorite text editor and call it nproc.sh:
+
+```
+#!/bin/sh
+nproc=$(ps | wc -l)
+echo "You are running $nproc processes"
+exit 0
+```
+
+In this example, we have used the following commands:
+- wc counts the number of lines, words, and characters in a file
+- ps gives information about running processes
+
+Now make it executable with: ```$ chmod +x nproc```
+Then run it with:```$ ./nproc```
+
+Type ps at the command line. You will notice there is one extra line of headings; thus, we have over-counted by one. Edit the script to correct this.
+
+Hint: you can use either of these two forms:
+```nproc=$(($nproc - 1 ))```
+```nproc=$(expr $nproc - 1)```
+
+Can you do this exercise without using any variables (i.e., do it in one line)?
+Hint: you will find it easier with the ```$(...)``` construct than with the  construct.
+
+```
+#!/bin/sh
+
+set -x
+
+########################################################*****
+nproc=$(ps | wc -l)
+
+nproc=$(($nproc - 1 ))
+# or nproc=$(expr $nproc - 1)
+
+echo "You are running $nproc processes"
+#exit 0
+########################################################*****
+
+#one line, method 1
+echo "You are running $( expr $(ps | wc -l) - 1 )  processes" 
+
+########################################################*****
+
+#one line, method 2
+echo "You are running $((     $(ps | wc -l) - 1 )) processes" 
+
+########################################################*****
+```
+
+You can download a script with the above steps from s_03/lab_nproc.sh. If you have not yet downloaded the SOLUTIONS file, please see the Lab Exercises - Files to Download page in the Welcome chapter for instructions.
+
+
+## Lab 3.2. A Simple Backup Utility
+
+Construct a shell script that works as a basic backup utility. It should be invoked as:```$ Backup Source Target```
+
+For each directory under Source, a directory should be created under Target.
+
+Each directory in Target should get a file named BACKUP.tar.gz which contains the compressed contents of the directory.
+
+You should not need permission to write in the Source directory area, but obviously, you will need permission to write in Target.
+
+A good way to test it might be to use /var as the source.
+
+Please Note:
+- Functions can be called recursively, but you do not have to do so.
+- Some of the utilities and commands you might need are: tar, gzip, find, pushd, popd, cp, echo, mkdir ....
+
+EXTRA CREDIT: Try making it an incremental backup; only do those directories which have changed since the last backup. This can be made very complicated, but just consider cases where there are files newer than when the backup was made.
+
+```
+#!/bin/sh
+
+usage="Usage: Backup Source Target"
+
+if [[ $# -lt 2 ]] ; then
+   echo -e '\n'    $usage '\n'
+   exit 1
+fi
+
+if ! [[ -d $1 ]] ; then
+   echo -e '\n' ERROR: First argument must be a Directory that exists: quitting'\n'
+   exit 1
+fi
+
+SOURCE=$1
+TARGET=$2
+
+DIRLIST=$(cd $SOURCE ; find . -type d )
+# echo DIRLIST= $DIRLIST
+
+for NAMES in $DIRLIST 
+do
+        SOURCE_DIR=$SOURCE/$NAMES
+        TARGET_DIR=$TARGET/$NAMES
+        echo "SOURCE= $SOURCE_DIR      TARGET=$TARGET_DIR"
+        FILELIST=$( (cd $SOURCE_DIR ; find . -maxdepth 1 ! -type d ) )
+        mkdir -p $TARGET_DIR
+        OLDIFS=$IFS
+
+IFS='
+'
+        tar -zcvf $TARGET_DIR/Backup.tar.gz  -C $SOURCE_DIR $FILELIST
+        IFS=$OLDIFS
+done
+```
+
+You can download a script with the above steps from s_03/lab_backup_nor.sh. 
+
+```
+#!/bin/sh
+
+StripDotSlash(){
+result=""
+for names in $1 ; do 
+       result="$result $(basename $names)"
+       done
+    echo "$result"
+}
+
+GetFileNames(){
+    StripDotSlash "$(find . -maxdepth 1 -not -type d )"
+}
+
+GetDirNames(){
+    StripDotSlash "$(find . -maxdepth 1 -mindepth 1 -type d)"
+}
+
+DoDir(){
+    local dirnames filenames R_SOURCE R_TARGET
+    DIRNO=$(( $DIRNO + 1))
+    cd $1
+    echo  "DIRNO=$DIRNO    SOURCEDIR= $1    TARGETDIR = $2"
+    dirnames=$(GetDirNames)
+    filenames=$(GetFileNames) ;
+    if [[ -n $filenames ]] ; then
+        tar -zcf $2/Backup.tar.gz $filenames
+    fi
+
+    for R_SOURCE in $dirnames ; do
+        R_TARGET=$2/$R_SOURCE
+        mkdir -p $R_TARGET
+        DoDir $1/$R_SOURCE$R_TARGET
+    done
+}
+
+###########################################################################
+
+SOURCE=$1
+TARGET=$2
+
+# Make sure the target directory is a full path name
+
+#if ! [[ $(echo "$TARGET" | grep -q ^\/) ]] ; then
+if ! [[ $(echo "$TARGET" | grep ^\/) ]] ; then
+    echo -n TARGET was $TARGET: AFTER ADDING FULL PATH:
+    TARGET=$(pwd)\/$TARGET
+    echo TARGET now is $TARGET
+fi
+
+DIRNO=0
+usage="Usage: Backup Source Target"
+
+if [[ $# -lt 2 ]] ; then
+    echo -e '\n'    $usage '\n'
+    exit 1
+fi
+
+if ! [[ -d $1 ]] ; then
+    echo -e '\n' ERROR: First argument must be a Directory that exists: quitting'\n'
+    exit 1
+fi
+
+# Make sure the target directory exists
+mkdir -p $TARGET
+
+DoDir $SOURCE $TARGET
+
+echo "Backup Successfully Done"
+exit 0
+###########################################################################
+```
+
+You can download a script with the above steps from s_03/lab_backup_r.sh.
+
+## References
+- https://ryanstutorials.net/bash-scripting-tutorial/bash-functions.php
+
