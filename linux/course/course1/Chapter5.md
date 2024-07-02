@@ -403,3 +403,364 @@ When tweaking parameters in /proc/sys/vm, the usual best practice is to adjust o
 Memory tuning can be subtle: what works in one system situation or load may be far from optimal in other circumstances.
 <img src="images/chapter5_15.png"/>
 
+### Using 'vmstat'
+
+**vmstat** is a multi-purpose tool that displays information about memory, paging, I/O, processor activity and processes. It has many options. The general form of the command is: ```$ vmstat [options] [delay] [count]```
+
+If delay is given in seconds, the report is repeated at that interval count times; if count is not given, **vmstat** will keep reporting statistics forever, until it is killed by a signal, such as Ctrl-C.
+
+If no other arguments are given, you can see what vmstat displays, where the first line shows averages since the last reboot, while succeeding lines show activity during the specified interval.
+
+```$ vmstat 2 4```
+<img src="images/chapter5_16.png"/>
+
+If the option **-S m** is given, memory statistics will be in MB instead of KB.
+
+With the **-a** option, **vmstat** displays information about active and inactive memory, where active memory pages are those which have been recently used; they may be clean (disk contents are up to date) or dirty (need to be flushed to disk eventually). By contrast, inactive memory pages have not been recently used and are more likely to be clean and are released sooner under memory pressure:
+
+```$ vmstat -a 2 4```
+Memory can move back and forth between active and inactive lists, as they get newly referenced, or go a long time between uses.
+<img src="images/chapter5_17.png"/>
+
+If you just want to get some quick statistics on only one partition, use the **-p** option:
+<img src="images/chapter5_18.png"/>
+
+### OOM Killer
+
+Systems may run out of physical memory. You can:
+- Deny any further memory requests until memory is freed up
+- Extend physical memory by the use of swap space
+- Terminate (intelligently) selected processes to reduce memory usage and let the system survive.
+
+Linux systems most often implement the second and third methods. The Out of Memory (OOM) Killer is the one selecting which processes are terminated.
+
+The simplest way to deal with memory pressure would be to permit memory allocations to succeed as long as free memory is available and then fail when all memory is exhausted.
+
+The second simplest way is to use swap space on disk to push some of the resident memory out of core; in this case, the total available memory (at least in theory) is the actual RAM plus the size of the swap space. The hard part of this is to figure out which pages of memory to swap out when pressure demands. In this approach, once the swap space itself is filled, requests for new memory must fail.
+
+Linux, however, goes one better; it permits the system to overcommit memory, so that it can grant memory requests that exceed the size of RAM plus swap. While this might seem foolhardy, many (if not most) processes do not use all requested memory.
+
+An example would be a program that allocates a 1 MB buffer, and then uses only a few pages of the memory. Another example is that every time a child process is forked, it receives a copy of the entire memory space of the parent. Because Linux uses the COW (copy on write) technique, unless one of the processes modifies memory, no actual copy needs be made. However, the kernel has to assume that the copy might need to be done.
+
+Thus, the kernel permits overcommission of memory, but only for pages dedicated to user processes; pages used within the kernel are not swappable and are always allocated at request time.
+
+### OOM Killer Algorithms
+
+You can modify, and even turn off this overcommission by setting the value of **/proc/sys/vm/overcommit_memory**:
+- 0: (default) Permit overcommission, but refuse obvious overcommits, and give root users somewhat more memory allocation than normal users.
+- 1: All memory requests are allowed to overcommit.
+- 2: Turn off overcommission. Memory requests will fail when the total memory commit reaches the size of the swap space plus a configurable percentage (50 by default) of RAM. This factor is modified changing **/proc/sys/vm/overcommit_ratio**.
+
+If available memory is exhausted, Linux invokes the OOM-killer (Out Of Memory) to decide which process(es) should be exterminated to open up some memory.
+
+There is no precise science for this; the algorithm must be heuristic and cannot satisfy everyone. In the minds of many developers, the purpose of the OOM-killer is to permit a graceful shutdown, rather than be a part of normal operations.
+
+An amusing take on this was given by [Andries Brouwer](https://lwn.net/Articles/104185/):
+<img src="images/chapter5_19.png"/>
+
+In order to make decisions of who gets sacrificed to keep the system alive, a value called the **badness** is computed (which can be read from **/proc/[pid]/oom_score**) for each process on the system and the order of the killing is determined by this value.
+
+Two entries in the same directory can be used to promote or demote the likelihood of extermination. The value of **oom_adj** is the number of bits the points should be adjusted by. Normal users can only increase the badness; a decrease (a negative value for **oom_adj**) can only be specified by a superuser. The value of **oom_adj_score** directly adjusts the point value. Note that the use of **oom_adj** is deprecated.
+
+## Network Monitoring
+
+### Network Monitoring Tools
+
+<img src="images/chapter5_20.png"/>
+
+## Lab Exercises
+
+### Lab 5.1. Getting Uptime and Load Average
+
+To gain insight into your system's performance, complete the following two tasks:
+- Ascertain how long your system has been up.
+- Display the load average.
+
+A very simple method is just to use the uptime utility:
+
+$ uptime
+
+10:26:40 up 3:19, 5 users, load average: 1.46, 1.40, 1.19
+
+A second method is to look at the first line of output from top:
+
+$ top | head
+
+top - 10:28:11 up  3:20,  5 users,  load average: 1.93, 1.52, 1.25
+Tasks: 313 total,   1 running, 312 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.0 us,  0.3 sy,  0.0 ni, 98.2 id,  0.5 wa,  0.0 hi,  0.0  si, 0.0
+KiB Mem : 16284472 total,  6556792 free, 1029760 used,  8697920 buff/cache
+KiB Swap:  8290300 total,  8290300 free,       0 used. 10364220 avail Mem
+
+  PID USER     PR  NI   VIRT     RES    SHR S  %CPU %MEM    TIME+ COMMAND
+ 2615 coop     20  0  504536  186312  65488 S   6.7  1.1  6:28.30 skype-b+
+18248 coop     20  0  655804   50816  30884 S   6.7  0.3  0:20.11 emacs
+    1 root     20  0  204912    6508   3956 S   0.0  0.0  0:00.92 systemd
+
+A third method is to use w:
+
+10:30:51 up 3:23, 5 users, load average: 0.55, 1.11, 1.14
+USER     TTY    FROM            LOGIN@   IDLE   JCPU  PCPU WHAT
+coop     :0     :0              07:08   ?xdm?  16:51  0.19s gdm-session-
+coop     pts/0  :0              07:09    2:22m  0.12s 0.12s bash
+coop     pts/1  :0              07:09    1:37m  0.42s 0.42s bash
+coop     pts/2  :0              07:09    0.00s 51.09s 0.00s w
+coop     pts/3  :0              07:09   27:08   0.25s 0.25s bash
+
+### Lab 5.2. Background and Foreground Jobs
+
+We are going to launch a graphical program from a terminal window, so that one can no longer type in the window. We are going to launch a graphical program from a terminal window, so that one can no longer type in the window. gedit is an easy choice but you can substitute any other program that does this.
+
+Open gedit on a new file as in:
+$ gedit somefile
+You can no longer type in the terminal window.
+While your pointer is over the terminal window, hit CTRL-Z.
+ˆZ
+[3]+   Stopped            gedit somefile
+You can no longer type in the gedit window.
+With jobs -l, see what processes have been launched from this terminal window:
+$ jobs -l
+[1]  17705 Running              evince *pdf &
+[2]- 18248 Running              emacs /tmp/hello.tex &
+[3]+ 19827 Stopped              gedit somefile
+Now put the most recent job (gedit somefile) in background:
+$ bg
+[3]+ gedit somefile &
+Now you should be able to type in the gedit window.
+Put the process in foreground again:
+$ fg
+gedit somefile
+Note you can no longer type in the terminal window.
+To clean up, suspend the process again and then use kill to terminate it:
+ˆZ
+[3]+ Stopped              gedit somefile
+
+$ jobs -l
+[1]  17705 Running              evince *pdf &
+[2]- 18248 Running              emacs /tmp/hello.tex &
+[3]+ 19827 Stopped              gedit somefile
+
+$ kill -9 19827
+$ jobs -l
+[1]  17705 Running              evince *pdf &
+[2]- 18248 Running              emacs /tmp/hello.tex &
+[3]+ 19827 Killed               gedit somefile
+
+$ jobs -l
+[1]- 17705 Running              evince *pdf &
+[2]- 18248 Running              emacs /tmp/hello.tex &
+
+### Lab 5.3. Using 'at' for Batch Processing in the Future
+
+Schedule a very simple task to run at a future time from now.
+
+This can be as simple as running ls or date and saving the output. (You can use a time as short as one minute in the future.)
+
+Note that the command will run in the directory from which you schedule it with at.
+
+Do this:
+- From a short bash script
+- Interactively
+
+
+1. Create the file testat.sh containing:
+
+#!/bin/bash
+date > /tmp/datestamp
+
+And then make it executable and queue it up with at:
+
+$ chmod +x testat.sh
+$ at now + 1 minute -f testat.sh
+
+You can see if the job is queued up to run with atq:
+$ atq
+17        Wed Apr 22 08:55:00 2015 a student
+
+Make sure the job actually ran:
+$ cat /tmp/datestamp
+Wed Apr 22 08:55:00 CDT 2015
+
+What happens if you take the >/tmp/datestamp out of the command? (Hint: type mail if not prompted to do so!)
+
+2. Interactively it is basically the same procedure. Just queue up the job with:
+
+$ at now + 1 minute
+at> date > /tmp/datestamp
+CTRL-D
+$ atq
+
+### Lab 5.4. Scheduling a Periodic Task with 'cron'
+
+Set up a cron job to do some simple task every day at 10 AM.
+
+Create a file named mycrontab with the following content:
+
+0 10 * * * /tmp/myjob.sh
+
+Then create /tmp/myjob.sh containing:
+
+#!/bin/bash
+echo Hello I am running $0 at $(date)
+
+Make it executable:
+
+$ chmod +x /tmp/myjob.sh
+
+Put it in the crontab system with:
+
+$ crontab mycrontab
+
+Verify it was loaded with:
+
+$ crontab -l
+0 10 * * * /tmp/myjob.sh
+
+$ sudo ls -l /var/spool/cron/student
+-rw------- 1 student student 25 Apr 22 09:59 /var/spool/cron/student
+
+$ sudo cat /var/spool/cron/student
+0 10 * * * /tmp/myjob.sh
+
+Note: If you don't really want this running every day, printing out messages like:
+
+Hello I am running /tmp/myjob.sh at Wed Apr 22 10:03:48 CDT 2015
+
+and mailing them to you, you can remove it with:
+
+$ crontab -r
+
+If the machine is not up at 10 AM on a given day, anacron will run the job at a suitable time.
+
+### Lab 5.5. Using 'stress' or 'stress-ng'
+
+stress is a C language program written by Amos Waterland at the University of Oklahoma, licensed under the GPL v2. It is designed to place a configurable amount of stress by generating various kinds of workloads on the system.
+
+stress-ng is essentially an enhanced version of stress, which respects its symptoms and options. It is actively maintained: see the [ubuntu wiki](https://wiki.ubuntu.com/Kernel/Reference/stress-ng).
+
+All major distributions should have stress-ng in their packaging systems However, for RHEL/CentOS it needs to be obtained from the EPEL repository. As of this writing, there is no package in the EPEL 8 repository, but you can install the one from EPEL 7 without a problem.
+
+Installing from Source: If you are lucky, you can install stress or stress-ng directly from your distribution’s packaging system. Otherwise, the source for stress-ng can be obtained using git. (Or you can download a tarball and use that.) To download, compile, and install:
+
+$ git clone git://kernel.ubuntu.com/cking/stress-ng.git
+$ cd stress-ng
+$ make
+$ sudo make install
+
+Once installed, you can do $ stress-ng --help for a quick list of options or $ info stress-ng for more detailed documentation.
+
+As an example, the command $ stress-ng -c 8 -i 4 -m 6 -t 20s will do the following:
+- Fork off 8 CPU-intensive processes, each spinning on a sqrt() calculation.
+- Fork off 4 I/O-intensive processes, each spinning on sync().
+- Fork off 6 memory-intensive processes, each spinning on malloc(), allocating 256 MB by default. The size can be changed as in --vm-bytes 128M.
+- Run the stress test for 20 seconds.
+
+After installing stress-ng, you may want to start up your system’s graphical system monitor, which you can find on your application menu, or run from the command line, which is probably gnome-system-monitor or ksysguard.
+
+Now begin to put stress on the system. The exact numbers you use will depend on your system’s resources, such as the number of CPU’s and RAM size.
+
+For example, doing  $ stress-ng -m 4 -t 20s puts only a memory stressor on the system.
+
+Play with combinations of the switches and see how they impact each other. You may find the stress-ng program useful to simulate various high load conditions.
+
+### Lab 5.6. Processes
+
+1. Run ps with the options -ef. Then run it again with the options aux. Note the differences in the output.
+2. Run ps so that only the process ID, priority, nice value, and the process command line are displayed.
+3. Start a new bash session by typing bash at the command line. Start another bash session using the nice command, but this time giving it a nice value of 10.
+4. Run ps as in step 2 to note the differences in priority and nice values. Note the process ID of the two bash sessions.
+Change the nice value of one of the bash sessions to 15 using renice. Once again, observe the change in priority and nice values.
+5. Run top and watch the output as it changes. Hit q to stop the program.
+
+```
+1)
+$ ps -ef
+$ ps aux
+
+2)
+$ ps -o pid,pri,ni,cmd
+  PID PRI NI CMD
+ 2389  19  0 bash
+22079  19  0 ps -o pid,pri,ni,cmd
+(Note: There should be no spaces between parameters.)
+
+3)
+$ bash
+$ nice -n 10 bash
+$ ps -o pid,pri,ni,cmd
+ 2389 19  0 bash
+22115 19  0 bash
+22171  9 10 bash
+22227  9 10 ps -o pid,pri,ni,cmd
+
+4)
+$ renice 15 -p 22171
+$ ps -o pid,pri,ni,cmd
+ PID PRI NI CMD
+ 2389 19  0 bash
+22115 19  0 bash
+22171  4 15 bash
+22246  4 15 ps -o pid,pri,ni,cmd
+
+5)
+$ top
+```
+
+### Lab 5.7. Monitoring Process States
+
+1. Use dd to start a background process which reads from /dev/urandom and writes to /dev/null.
+2. Check the process state. What should it be?
+3. Bring the process to the foreground using the fg command. Then hit Ctrl-Z. What does this do? Look at the process state again, what is it?
+4. Run the jobs program. What does it tell you?
+5. Bring the job back to the foreground, then terminate it using kill from another window.
+
+```
+1) 
+$ dd if=/dev/urandom of=/dev/null &
+
+2)
+$ ps -C dd -o pid,cmd,stat
+25899 dd if=/dev/urandom of=/dev/ R
+Should be S or R.
+
+3) 
+$ fg
+$ ˆZ
+$ ps -C dd -o pid,cmd,stat
+  PID CMD                         STAT
+25899 dd if=/dev/urandom of=/dev/ T
+State should be T.
+
+4)
+Type the jobs command. What does it tell you?
+$ jobs
+[1]+ Stopped                  dd if=/dev/urandom of=/dev/null
+
+5)
+Bring the job back to the foreground, then kill it using the kill command from another window.
+$ fg
+$ kill 25899
+```
+
+### Lab 5.8. Invoking the OOM Killer
+
+Examine what swap partitions and files are present on your system by examining /proc/swaps.
+
+Turn off all swap with the command:
+
+$ sudo /sbin/swapoff -a
+
+Make sure you turn it back on later, when we are done, with:
+
+$ sudo /sbin/swapon -a
+
+Now we are going to put the system under increasing memory pressure. One way to do this is to exploit the stress-ng program we installed earlier, running it with arguments such as:
+
+$ stress-ng -m 12 -t 10s
+
+which would keep 3 GB busy for 10 seconds.
+
+You should see the OOM (Out of Memory) killer swoop in and try to kill processes in a struggle to stay alive. You can see what is going on by running dmesg, monitoring /var/log/messages, /var/log/syslog, or through graphical interfaces that expose the system logs.
+
+Who gets clobbered first?
+
