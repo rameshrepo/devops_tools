@@ -192,12 +192,13 @@ After each step do: ```$ ls -l afile``` to see how the permissions took, and try
 
 Normally, programs are run with the privileges of the user who is executing the program. Occasionally it may make sense to have normal users have expanded capabilities they would not normally have, such as the ability to start or stop a network interface or edit a file owned by the superuser.
 
-By setting the setuid (set user ID) flag on an executable file one modifies this normal behavior by giving the program the access rights of the owner rather than the user of the program.
+By setting the **setuid (set user ID)** flag on an executable file one modifies this normal behavior by giving the program the access rights of the **owner** rather than the **user** of the program.
 
-We should emphasize that this is generally a bad idea and is to be avoided in most circumstances. Writing a daemon program with lesser privileges for this kind of use is often better.
+We should emphasize that this is generally a bad idea and is to be avoided in most circumstances. Writing a **daemon** program with lesser privileges for this kind of use is often better.
 
-Suppose we have the following C program (./writeit.c) which attempts to overwrite a file in the current directory, afile:
+Suppose we have the following C program **(./writeit.c)** which attempts to overwrite a file in the current directory, afile:
 
+```
 1 #include <stdio.h>
 2 #include <unistd.h>
 3 #include <fcntl.h>
@@ -217,34 +218,62 @@ Suppose we have the following C program (./writeit.c) which attempts to overwrit
 17         close(fd);
 18         exit(EXIT_SUCCESS);
 19 }
+```
 
-This can be compiled simply by doing:
-
-$ make writeit
-or
-$ gcc -o writeit writeit.c
+This can be compiled simply by doing: ```$ make writeit (or) $ gcc -o writeit writeit.c```
 
 If you try to run this program on a file owned by root, you will get the following sequence of events:
-
+```
 $ sudo touch afile
 $ ./writeit afile
 wrote -1 bytes
+```
 
+```
 $ sudo ./writeit afile
 wrote 15 bytes
+```
 
 Thus, the root user was able to overwrite the file it owned, but a normal user could not.
 
 Observe that changing the owner of writeit to root will not help:
-
+```
 $ sudo chown root.root writeit
 $ ./writeit
 wrote -1 bytes
+```
 
 By setting the setuid bit you can make any normal user able to do this:
-
+```
 $ sudo chmod +s writeit
 $ ./writeit
 wrote 15 bytes
+```
 
 You may be asking, why did not we just write a script to do such an operation, rather than to write and compile an executable program? The reason is that under Linux, if you change the setuid bit on such an executable, it will not do anything unless you actually change the setuid bit on the shell.
+
+Solution:
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
+int main(int argc, char *argv[])
+{
+
+        int fd, rc;
+        char *buffer = "TESTING A WRITE";
+
+        fd = open("./afile", O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+        rc = write(fd, buffer, strlen(buffer));
+        printf("wrote %d bytes\n", rc);
+        close(fd);
+        exit(EXIT_SUCCESS);
+}
+```
+
+You can download a script with the above steps from **s_06/lab_write.c**.
