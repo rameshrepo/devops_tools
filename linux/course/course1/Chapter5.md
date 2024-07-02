@@ -308,5 +308,98 @@ The sleep command can be used to easily delay commands:```$ (sleep 600; launchba
 
 ### Memory Monitoring
 
+Over time, systems have become more demanding of memory resources and at the same time RAM prices have decreased and performance has improved.
 
+Yet, it is often the case that bottlenecks in overall system performance and throughput are memory-related; the CPUs and the I/O subsystem can be waiting for data to be retrieved from or written to memory.
+
+There are many tools for monitoring, debugging and tuning a system’s behavior with regard to its memory.
+
+Tuning the memory sub-system can be a complex process. First of all, one has to take note that memory usage and I/O throughput are intrinsically related, as, in most cases, most memory is being used to cache the contents of files on disk.
+
+Thus, changing memory parameters can have a large effect on I/O performance, and changing I/O parameters can have an equally large converse effect on the virtual memory sub-system.
+
+<img src="images/chapter5_12.png"/>
+
+
+### '/proc/meminfo'
+
+The pseudofile **/proc/meminfo** contains a wealth of information about how memory is being used.
+
+```
+$ cat /proc/meminfo
+
+MemTotal:      16265960 kB
+MemFree:       10481080 kB
+MemAvailable:  12596456 kB
+Buffers:         177824 kB
+Cached:         2768600 kB
+SwapCached:           0 kB
+Active:         3320564 kB
+Inactive:       1566504 kB
+Active(anon):   2381096 kB
+Inactive(anon):  218792 kB
+Active(file):    939468 kB
+Inactive(file): 1347712 kB
+Unevictable:     437372 kB
+Mlocked:             32 kB
+SwapTotal:     21580796 kB
+SwapFree:      21580796 kB
+Dirty:              288 kB
+Writeback:            0 kB
+AnonPages:      2248272 kB
+Mapped:          811700 kB
+Shmem:           659452 kB
+KReclaimable:    159792 kB
+Slab:            307548 kB
+SReclaimable:    159792 kB
+SUnreclaim:      147756 kB
+KernelStack:      15680 kB
+PageTables:       74940 kB
+NFS_Unstable:         0 kB
+Bounce:               0 kB
+WritebackTmp:         0 kB
+CommitLimit:   29713776 kB
+Committed_AS:  10239968 kB
+VmallocTotal:  34359738367 kB
+VmallocUsed:      24592 kB
+VmallocChunk:         0 kB
+Percpu:            6688 kB
+HardwareCorrupted:    0 kB
+AnonHugePages:   716800 kB
+ShmemHugePages:       0 kB
+ShmemPmdMapped:       0 kB
+FileHugePages:        0 kB
+FilePmdMapped:        0 kB
+HugePages_Total:      0
+HugePages_Free:       0
+HugePages_Rsvd:       0
+HugePages_Surp:       0
+Hugepagesize:      2048 kB
+Hugetlb:              0 kB 
+DirectMap4k:     258124 kB
+DirectMap2M:    9052160 kB
+DirectMap1G:    8388608 kB
+```
+
+It is worthwhile to go through this listing and understand most of the entries, listed in the table below.
+
+Table: /proc/meminfo Entries
+
+<img src="images/chapter5_13.png"/>
+<img src="images/chapter5_14.png"/>
+Note that the exact entries you may see will depend on the exact kernel version you are running.
+
+### '/proc/sys/vm'
+
+The /proc/sys/vm directory contains many tunable knobs to control the Virtual Memory system. Exactly what appears in this directory will depend somewhat on the kernel version. Almost all of the entries are writable (by root).
+
+Remember that these values can be changed either by directly writing to the entry, or using the sysctl utility.
+
+When tweaking parameters in /proc/sys/vm, the usual best practice is to adjust one thing at a time and look for effects. The primary (inter-related) tasks are: 
+- Controlling flushing parameters; i.e., how many pages are allowed to be dirty and how often they are flushed out to disk.
+- Controlling swap behavior; i.e., how much pages that reflect file contents are allowed to remain in memory, as opposed to those that need to be swapped out as they have no other backing store. 
+- Controlling how much memory overcommission is allowed, since many programs never need the full amount of memory they request, particularly because of copy on write (COW) techniques. 
+
+Memory tuning can be subtle: what works in one system situation or load may be far from optimal in other circumstances.
+<img src="images/chapter5_15.png"/>
 
