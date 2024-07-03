@@ -271,6 +271,8 @@ If you’re working with PDF files that contain confidential information and you
 
 When you run this command, you will receive a prompt to set the required password, which can have a maximum of 32 characters. A new file, private.pdf, will be created with the identical content as public.pdf, but anyone will need to type the password to be able to view it.
 
+<img src="images/chapter10_21.png"/>
+
 ### Using Ghostscript
 
 Ghostscript is widely available as an interpreter for the Postscript and PDF languages. The executable program associated with it is abbreviated to gs.
@@ -298,5 +300,29 @@ It is a simple application that provides a graphical interface for modifying PDF
 
 For example, to collect the details of a document, you can use the following command:```$ pdfinfo /usr/share/doc/readme.pdf```
 
-<img src="images/chapter10_21.png"/>
+<img src="images/chapter10_22.png"/>
+
+## Lab Exercises
+
+### Lab 10.1. The CUPS Web Interface
+
+Bring up http://localhost:631 in your favorite browser.
+In the first column (CUPS for Users), you will find a wealth of documentation. Spending some time on it will be profitable.
+In the second column (CUPS for Administrators), you will find a lot of configuration information. You can do things like add new printers etc. (once you supply the administrator password etc.)
+The third column is CUPS for Developers and is not particularly relevant for this class.
+<img src="images/chapter10_23.png"/>
+
+
+### Lab 10.2. Creating PostScript and PDF from Text Files
+
+Check to see if the enscript package has been installed on your system, and if not, install it.
+Using enscript, convert the text file /var/dmesg to PostScript format and name the result /tmp/dmesg.ps. (As an alternative you can use any large text file on our system.)
+Make sure you can read the PostScript file (with evince, for example) and compare to the original file.
+(Note: On some systems, evince may have problems with the PostScript file, but the PDF file you produce from it will be fine for viewing.)
+Convert the PostScript document to PDF format using ps2pdf.
+Make sure you can read the resulting PDF file. Does it look identical to the PostScript version?
+Is there a way you can go straight to the PDF file without producing a PostScript file on the disk along the way?
+Using pdfinfo, determine what PDF version is used to encode the file, the number of pages, the page size, and other metadata about the file. (If you don’t have pdfinfo you probably need to install the poppler-utils package.
+
+<img src="images/chapter10_24.png"/>
 
