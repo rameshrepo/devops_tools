@@ -306,16 +306,14 @@ For example, to collect the details of a document, you can use the following com
 
 ### Lab 10.1. The CUPS Web Interface
 
-Bring up http://localhost:631 in your favorite browser.
-In the first column (CUPS for Users), you will find a wealth of documentation. Spending some time on it will be profitable.
-In the second column (CUPS for Administrators), you will find a lot of configuration information. You can do things like add new printers etc. (once you supply the administrator password etc.)
-The third column is CUPS for Developers and is not particularly relevant for this class.
-<img src="images/chapter10_23.png"/>
-
+1. Bring up http://localhost:631 in your favorite browser.
+2. In the first column (**CUPS for Users**), you will find a wealth of documentation. Spending some time on it will be profitable.
+3. In the second column (**CUPS for Administrators**), you will find a lot of configuration information. You can do things like add new printers etc. (once you supply the administrator password etc.)
+4. The third column is **CUPS for Developers** and is not particularly relevant for this class.
 
 ### Lab 10.2. Creating PostScript and PDF from Text Files
 
-Check to see if the enscript package has been installed on your system, and if not, install it.
+1. Check to see if the **enscript** package has been installed on your system, and if not, install it.
 Using enscript, convert the text file /var/dmesg to PostScript format and name the result /tmp/dmesg.ps. (As an alternative you can use any large text file on our system.)
 Make sure you can read the PostScript file (with evince, for example) and compare to the original file.
 (Note: On some systems, evince may have problems with the PostScript file, but the PDF file you produce from it will be fine for viewing.)
