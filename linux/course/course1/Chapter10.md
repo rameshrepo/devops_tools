@@ -322,23 +322,36 @@ Make sure you can read the resulting **PDF** file. Does it look identical to the
 4. Is there a way you can go straight to the **PDF** file without producing a **PostScript** file on the disk along the way?
 5. Using **pdfinfo**, determine what PDF version is used to encode the file, the number of pages, the page size, and other metadata about the file. (If you don’t have pdfinfo you probably need to install the **poppler-utils** package.
 
-Solution 10.2:
+**Solution 10.2**:
 
-Try:
+1. Try:
+```
 $ which enscript
 /usr/bin/enscript
-If you do not get a positive result, install with whichever command is appropriate for your Linux distribution:
-$ [ apt-get | dnf | yum | zypper ] install enscript
+```
+If you do not get a positive result, install with whichever command is appropriate for your Linux distribution:```$ [ apt-get | dnf | yum | zypper ] install enscript```
+
+2.
+```
 $ enscript -p /tmp/dmesg.ps /var/log/dmesg
 $ evince /tmp/dmesg.ps
+```
+
+3.
+```
 $ ps2pdf /tmp/dmesg.ps
 $ ls -lh /var/log/dmesg /tmp/dmesg.ps /tmp/dmesg.pdf
 -rw-rw-r-- 1 coop coop 28K Apr 22 13:00 /tmp/dmesg.pdf
 -rw-rw-r-- 1 coop coop 80K Apr 22 12:59 /tmp/dmesg.ps
 -rw-r--r-- 1 root root 53K Apr 22 11:48 /var/log/dmesg
 $ evince /tmp/dmesg.ps /tmp/dmesg.pdf
-Note the difference in sizes. PostScript files tend to be large, while PDF is a compressed format.
+```
+Note the difference in sizes. **PostScript** files tend to be large, while **PDF** is a compressed format.
+
+4.
 You may want to scan the man pages for enscript and ps2pdf to figure out how to use standard input or standard output instead of files.
+
+```
 $ enscript -p - /var/log/dmesg | ps2pdf - dmesg_direct.pdf
 [ 15 pages * 1 copy ] left in -
 85 lines were wrapped
@@ -346,6 +359,10 @@ $ enscript -p - /var/log/dmesg | ps2pdf - dmesg_direct.pdf
 $ ls -l dmesg*pdf
 -rw-rw-r-- 1 coop coop 28177 Apr 22 13:20 dmesg_direct.pdf
 -rw-rw-r-- 1 coop coop 28177 Apr 22 13:00 dmesg.pdf
+```
+
+5.
+```
 c7:/tmp>pdfinfo dmesg.pdf
 Title:         Enscript Output
 Author:        Theodore Cleaver
@@ -360,8 +377,7 @@ Encrypted:     no
 Page size:     612 x 792 pts (letter)
 Page rot:      0
 File size:     28177 bytes
-
-<img src="images/chapter10_25.png"/>
+```
 
 ### Lab 10.3. Combining PDFs
 
