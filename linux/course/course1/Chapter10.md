@@ -326,3 +326,77 @@ Using pdfinfo, determine what PDF version is used to encode the file, the number
 
 <img src="images/chapter10_24.png"/>
 
+Solution 10.2:
+
+Try:
+$ which enscript
+/usr/bin/enscript
+If you do not get a positive result, install with whichever command is appropriate for your Linux distribution:
+$ [ apt-get | dnf | yum | zypper ] install enscript
+$ enscript -p /tmp/dmesg.ps /var/log/dmesg
+$ evince /tmp/dmesg.ps
+$ ps2pdf /tmp/dmesg.ps
+$ ls -lh /var/log/dmesg /tmp/dmesg.ps /tmp/dmesg.pdf
+-rw-rw-r-- 1 coop coop 28K Apr 22 13:00 /tmp/dmesg.pdf
+-rw-rw-r-- 1 coop coop 80K Apr 22 12:59 /tmp/dmesg.ps
+-rw-r--r-- 1 root root 53K Apr 22 11:48 /var/log/dmesg
+$ evince /tmp/dmesg.ps /tmp/dmesg.pdf
+Note the difference in sizes. PostScript files tend to be large, while PDF is a compressed format.
+You may want to scan the man pages for enscript and ps2pdf to figure out how to use standard input or standard output instead of files.
+$ enscript -p - /var/log/dmesg | ps2pdf - dmesg_direct.pdf
+[ 15 pages * 1 copy ] left in -
+85 lines were wrapped
+
+$ ls -l dmesg*pdf
+-rw-rw-r-- 1 coop coop 28177 Apr 22 13:20 dmesg_direct.pdf
+-rw-rw-r-- 1 coop coop 28177 Apr 22 13:00 dmesg.pdf
+c7:/tmp>pdfinfo dmesg.pdf
+Title:         Enscript Output
+Author:        Theodore Cleaver
+Creator:       GNU Enscript 1.6.6
+Producer:      GPL Ghostscript 9.07
+CreationDate:  Wed Apr 22 13:00:26 2015
+ModDate:       Wed Apr 22 13:00:26 2015
+Tagged:        no
+Form:          none
+Pages:         15
+Encrypted:     no
+Page size:     612 x 792 pts (letter)
+Page rot:      0
+File size:     28177 bytes
+
+<img src="images/chapter10_25.png"/>
+
+### Lab 10.3. Combining PDFs
+
+Given two text files (you can create them or use ones that already exist since this is non-destructive), convert them into PDFs.
+Combine these two files into one PDF file.
+Depending on what software you have, employ the following methods:
+     (a) qpdf
+     (b) pdftk
+     (c) gs
+View the result and compare to the originals.
+
+<img src="images/chapter10_26.png"/>
+
+Solution 10.3:
+
+First, create two PDFs to play with, using enscript and then ps2pdf:
+$ enscript -p dmesg.ps /var/log/dmesg
+$ enscript -p boot.ps /var/log/boot.log
+$ ps2pdf dmesg.ps
+$ ps2pdf boot.ps
+Combining files:
+(a) Method 1: Using qpdf:
+     $ qpdf --empty --pages dmesg.pdf boot.pdf -- method1.pdf
+(b) Method 2: Using pdftk:
+      $ pdftk dmesg.pdf boot.pdf cat output method1.pdf
+(c) Method 3: Using gs:
+     $ gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=method2.pdf dmesg.pdf boot.pdf
+Now view them:
+$ ls -l method?.pdf
+$ evince method?.pdf
+How do the files compare? In appearance? In size? (Note the use of wildcards in method.pdf.)
+
+<img src="images/chapter10_27.png"/>
+
