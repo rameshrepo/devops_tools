@@ -31,7 +31,35 @@ When configuring a printer, make sure the device is currently turned on and conn
 <img src="images/chapter10_2.png"/>
 
 ### Demo: Adding a Network Printer
-TODO
+Let's demonstrate how to add a network printer on an Ubuntu distribution.
+So first, I go to the upper right hand corner and, like on most modern distributions, I can click there, and then click on the gear icon,
+<img src="images/chapter10_26.png"/>
+
+
+I scroll down to Devices. And there I pick Printers and then, I can click on Add a Printer.
+<img src="images/chapter10_27.png"/>
+
+
+It will first search the network and see if it can actually find something. This may take a little bit of time. So, it's gradually going to find what are actually the same printer, but a number of different modes for using it. If I type in the network address of my printer at the bottom, it will help but find things much more quickly. So, let me do that.
+<img src="images/chapter10_28.png"/>
+
+You see it's already found two different essentially printers at the network address I typed in.
+These are different modes of using the same printer, but the one that is the most native is this last one, which is actually a Brother printer. And then I'll just click on Add.
+
+As you can see, it says it's searching for drivers. So, it's going to look through its database of drivers that come with the Linux distribution. And it popped up this box here and it's saying I should install the gutenprint driver, which is a free software driver. And I'll just say Apply.
+<img src="images/chapter10_29.png"/>
+
+And it's giving me more information about the gutenprint driver.
+So, I will just say Apply again.
+And now the printer is installed and it says it's ready.
+I can do further configuration, for instance, by clicking here, on Additional Printer Settings, and then clicking on the printer that we have.
+I'll double click, and then we get kind of what we'd expect on any operating system for configuring a printer: various things we can control, such as Printer Options here.
+So, you see it set it by default for one-sided printing. Let me set it for two-sided, long edge, the DPI, the page size, etc.
+Job Options - you see how many copies, various scaling factors...
+Ink and Toner levels often won't work, unless we have a driver directly from the manufacturer who often only produce drivers for Windows machines.
+So, that's all we really have to do to install a network printer on a Linux system.
+Most printers these days are network printers. The situation for installing a local printer attached physically to the computer is pretty much the same and so we won't go through that.
+
 
 ### Adding Printers from the CUPS Web Interface
 
@@ -68,7 +96,19 @@ $ sudo systemctl [start|stop|restart] cups
 NOTE: The next screen demonstrates this on Ubuntu, but is the same for all major current Linux distributions. 
 
 ### Demo: Managing the CUPS Daemon
-TODO
+Managing the CUPS daemon is essentially the same on all recent Linux distributions, since they are systemd based it involves only using the command system control.
+So, for instance, if I want to see the current status, I can do "sudo systemctl status cups".
+And it's telling me it's enabled. Enabled means that it will start whenever the system starts,
+and that it's currently running and it shows you here information about the process in which the cups.service is running.
+If I want to stop it, I can just substitute the word stop for status [sudo systemctl stop cups] and then I look at status again and you'll see it says it's dead.
+Above it said it was running, now it says it's dead.
+I can restart it or just say start would be fine too, but I can just say restart and then if I look at status again, you'll see it's up and running again.
+If I don't want cups to start at boot, which generally I would not do unless there's no printer involved in the system at all, I can say disable,
+and when I do status again, you'll see it says the service is disabled here.
+So that means it won't automatically start up at boot. That doesn't change the fact that it's currently running, because you see it's still running,
+but it means when it reboots, it won't run again and I probably should restore it to enabled, so that it starts up again when the system restarts.
+So that's all the basic management options we have to deal with just to make sure that it's running, starts and stops when the system does.
+
 
 ### Printing from the Graphical Interface
 
