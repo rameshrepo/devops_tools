@@ -314,15 +314,13 @@ For example, to collect the details of a document, you can use the following com
 ### Lab 10.2. Creating PostScript and PDF from Text Files
 
 1. Check to see if the **enscript** package has been installed on your system, and if not, install it.
-Using enscript, convert the text file /var/dmesg to PostScript format and name the result /tmp/dmesg.ps. (As an alternative you can use any large text file on our system.)
-Make sure you can read the PostScript file (with evince, for example) and compare to the original file.
+2. Using **enscript**, convert the text file **/var/dmesg** to **PostScript** format and name the result **/tmp/dmesg.ps**. (As an alternative you can use any large text file on our system.)
+Make sure you can read the PostScript file (with **evince**, for example) and compare to the original file.
 (Note: On some systems, evince may have problems with the PostScript file, but the PDF file you produce from it will be fine for viewing.)
-Convert the PostScript document to PDF format using ps2pdf.
-Make sure you can read the resulting PDF file. Does it look identical to the PostScript version?
-Is there a way you can go straight to the PDF file without producing a PostScript file on the disk along the way?
-Using pdfinfo, determine what PDF version is used to encode the file, the number of pages, the page size, and other metadata about the file. (If you don’t have pdfinfo you probably need to install the poppler-utils package.
-
-<img src="images/chapter10_24.png"/>
+3. Convert the **PostScript** document to **PDF** format using **ps2pdf**.
+Make sure you can read the resulting **PDF** file. Does it look identical to the **PostScript** version?
+4. Is there a way you can go straight to the **PDF** file without producing a **PostScript** file on the disk along the way?
+5. Using **pdfinfo**, determine what PDF version is used to encode the file, the number of pages, the page size, and other metadata about the file. (If you don’t have pdfinfo you probably need to install the **poppler-utils** package.
 
 Solution 10.2:
 
