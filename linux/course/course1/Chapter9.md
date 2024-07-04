@@ -281,7 +281,41 @@ requires: package >= version-build
 In addition to the >= test (which requires that a package of the version specified or later is installed), you can also use >, =, <, and <=.
 
 ### Demo: Building a Binary RPM Package
-TODO
+We are now going to demonstrate how to build a binary rpm package from the source rpm, first on a CentOS system, and then on an openSUSE system, both of which are based on the Red Hat package manager.
+
+So, first we need to obtain the source rpm. So, we can do that using yum downloader on CentOS, and we give the source option (--source), and just the name of the package (gzip), and then just arbitrarily picking gzip [yum downloader --source gzip].
+<img src="images/chapter9_7.png"/>
+And notice that I did not have to be the superuser to do this.
+And there it is, it’s already been downloaded, it’s 732kB, and then I need only type a one line command.
+
+
+<img src="images/chapter9_8.png"/>
+Once again, I do not have to be root, rpmbuild --rebuild, and then I just give the name of the rpm, which downloaded to my current directory.So this is configuring and compiling, and this takes a while… it’s doing the usual config program that is standard for many tarballs.
+<img src="images/chapter9_9.png"/>
+So it will just take a little while - we’ll wait.
+
+
+Now, we’ll see when we go to the SUSE system, we’ll also not need to be a superuser. We can do this as an ordinary user once again, everything except the final install step.
+Ok, so now it is done with its work. So, the question is Where did it put it?. Well, in the student’s home directory there is now an rpmbuild directory.
+
+<img src="images/chapter9_10.png"/>
+And you’ll see there’s an RPMS directory in there, which has an x86_64 subdirectory, and there, you see it generated two binary rpms: gzip I could install, and then, there’s also a gzip-debuginfo, which is useful when you’re doing any kind of debugging, because it contains the entire symbol table for the gzip program.
+
+
+So, let’s pause for a second, while we fire up the openSUSE virtual machine, and then do the similar operations there.
+We’re going to do a similar operation on an openSUSE system. So, the first thing we have to do is to obtain the source package.
+
+<img src="images/chapter9_11.png"/>
+So, we’re going to obtain a very simple package called gup, and, while we could probably find some command line program to do this, I was not so successful in finding that easily,so I simply went to the openSUSE website and found where the source was installed, and here is the complete line I am using to download it, with wget. It’s a very small package.
+And then, it’s the same kind of command. All I have to do is say rpmbuild, and then I just give the name of the package, gup-0.3* [error received].
+<img src="images/chapter9_12.png"/>
+I’m sorry, I left out the rebuild option [rpmbuild --rebuild gup-0.3*]. There we go.
+
+So, it’s doing the same thing as we had before. And, once again, I have an rpmbuild subdirectory, and if I look in the RPMS directory, I see, once again, an x86_64.
+And there is the rpm that we generated. Notice that, by default, on openSUSE, you do not get the debuginfo. I have to specify some other options to get that rpm as well.
+<img src="images/chapter9_13.png"/>
+
+So, basically, the operation is the same on both systems. For neither one do I have to be a superuser to generate the binary rpm. I would only need it to install.
 
 ### Debian Package Creation Workflow
 

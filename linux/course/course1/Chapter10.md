@@ -113,9 +113,10 @@ I can restart it or just say start would be fine too, but I can just say restart
 
 **disable**
 If I don't want cups to start at boot, which generally I would not do unless there's no printer involved in the system at all, I can say disable by running ```$ sudo systemctl disable cups```, and when I do status again, you'll see it says the service is disabled here.
-So that means it won't automatically start up at boot. That doesn't change the fact that it's currently running, because you see it's still running,
+So that means it won't automatically start up at boot. That doesn't change the fact that it's currently running, because you see it's still running, but it means when it reboots, it won't run again.
+
 <img src="images/chapter10_36.png"/>
-but it means when it reboots, it won't run again.
+
 
 **enable**
 I probably should restore it to enabled, so that it starts up again when the system restarts. ```$ sudo systemctl enable cups```
