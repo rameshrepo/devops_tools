@@ -38,27 +38,29 @@ So first, I go to the upper right hand corner and, like on most modern distribut
 
 I scroll down to Devices. And there I pick Printers and then, I can click on Add a Printer.
 <img src="images/chapter10_27.png"/>
-
+<img src="images/chapter10_28.png"/>
+<img src="images/chapter10_29.png"/>
 
 It will first search the network and see if it can actually find something. This may take a little bit of time. So, it's gradually going to find what are actually the same printer, but a number of different modes for using it. If I type in the network address of my printer at the bottom, it will help but find things much more quickly. So, let me do that.
-<img src="images/chapter10_28.png"/>
+<img src="images/chapter10_30.png"/>
 
 You see it's already found two different essentially printers at the network address I typed in.
 These are different modes of using the same printer, but the one that is the most native is this last one, which is actually a Brother printer. And then I'll just click on Add.
 
 As you can see, it says it's searching for drivers. So, it's going to look through its database of drivers that come with the Linux distribution. And it popped up this box here and it's saying I should install the gutenprint driver, which is a free software driver. And I'll just say Apply.
-<img src="images/chapter10_29.png"/>
+<img src="images/chapter10_31.png"/>
+<img src="images/chapter10_32.png"/>
 
-And it's giving me more information about the gutenprint driver.
-So, I will just say Apply again.
-And now the printer is installed and it says it's ready.
+And it's giving me more information about the gutenprint driver.So, I will just say Apply again. And now the printer is installed and it says it's ready.
+<img src="images/chapter10_33.png"/>
+
 I can do further configuration, for instance, by clicking here, on Additional Printer Settings, and then clicking on the printer that we have.
+
+<img src="images/chapter10_34.png"/>
 I'll double click, and then we get kind of what we'd expect on any operating system for configuring a printer: various things we can control, such as Printer Options here.
 So, you see it set it by default for one-sided printing. Let me set it for two-sided, long edge, the DPI, the page size, etc.
 Job Options - you see how many copies, various scaling factors...
 Ink and Toner levels often won't work, unless we have a driver directly from the manufacturer who often only produce drivers for Windows machines.
-So, that's all we really have to do to install a network printer on a Linux system.
-Most printers these days are network printers. The situation for installing a local printer attached physically to the computer is pretty much the same and so we won't go through that.
 
 
 ### Adding Printers from the CUPS Web Interface
