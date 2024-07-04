@@ -386,34 +386,34 @@ File size:     28177 bytes
 
 ### Lab 10.3. Combining PDFs
 
-Given two text files (you can create them or use ones that already exist since this is non-destructive), convert them into PDFs.
-Combine these two files into one PDF file.
+1. Given two text files (you can create them or use ones that already exist since this is non-destructive), convert them into PDFs.
+2. Combine these two files into one PDF file.
 Depending on what software you have, employ the following methods:
-     (a) qpdf
-     (b) pdftk
-     (c) gs
-View the result and compare to the originals.
+    - (a) qpdf
+    - (b) pdftk
+    - (c) gs
+3. View the result and compare to the originals.
 
-<img src="images/chapter10_26.png"/>
+**Solution 10.3**:
 
-Solution 10.3:
-
-First, create two PDFs to play with, using enscript and then ps2pdf:
+1. First, create two PDFs to play with, using enscript and then ps2pdf:
+```
 $ enscript -p dmesg.ps /var/log/dmesg
 $ enscript -p boot.ps /var/log/boot.log
 $ ps2pdf dmesg.ps
 $ ps2pdf boot.ps
-Combining files:
-(a) Method 1: Using qpdf:
-     $ qpdf --empty --pages dmesg.pdf boot.pdf -- method1.pdf
-(b) Method 2: Using pdftk:
-      $ pdftk dmesg.pdf boot.pdf cat output method1.pdf
-(c) Method 3: Using gs:
-     $ gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=method2.pdf dmesg.pdf boot.pdf
-Now view them:
+```
+
+2. Combining files:
+- (a) Method 1: Using qpdf: ```$ qpdf --empty --pages dmesg.pdf boot.pdf -- method1.pdf```
+- (b) Method 2: Using pdftk: ```$ pdftk dmesg.pdf boot.pdf cat output method1.pdf```
+- (c) Method 3: Using gs: ```$ gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=method2.pdf dmesg.pdf boot.pdf```
+
+3. Now view them:
+```
 $ ls -l method?.pdf
 $ evince method?.pdf
+```
 How do the files compare? In appearance? In size? (Note the use of wildcards in method.pdf.)
 
-<img src="images/chapter10_27.png"/>
 
