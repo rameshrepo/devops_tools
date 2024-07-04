@@ -98,7 +98,27 @@ Some lp commands and other printing utilities you can use are listed in the tabl
 **lpoptions** can be used to set printer options and defaults. Each printer has a set of tags associated with it, such as the default number of copies and authentication requirements. You can type lpoptions help to obtain a list of supported options. lpoptions can also be used to set system-wide values, such as the default printer.
 
 ### Demo: Printing Using lp
-TODO
+
+Let's do a simple demonstration of using the "lp"  utility to print directly from the command line.
+These days, of course, you'll do most of your printing within an application with a graphical interface, where you just have to click on "Print",
+or maybe you hit Ctrl+P to bring up the print dialog, but it's still useful to know how to do it from a command line.
+So suppose I have a file named cover.pdf.
+I can simply do ```$ lp cover.pdf```
+And you'll see it is indicated that it's being printed.
+<img src="images/chapter10_23.png"/>
+
+You'll notice on the right-hand side here, I have brought up the graphical interface to the printer.
+And you'll see that it is showing this printer HLL2380DW as being the one that's printing.
+Now I can do a number of other things.
+
+For instance, I could try to send it to another printer or I could change the default printer.
+So, if I say ```$ lp options```. It will show all the options that are available on that printer.
+<img src="images/chapter10_24.png"/>
+
+Suppose I want to shift it to the other printer, this one that starts with MFC9.
+Then I would do ```$ lp options -d MFC9340CDW``` which is now our Brother printer.
+That's a color laser printer, whereas the first one was a black and white.
+<img src="images/chapter10_25.png"/>
 
 ### Try-It-Yourself: Printing with lp
 
@@ -115,8 +135,7 @@ Some of these commands are listed in the table.
 <img src="images/chapter10_7.png"/>
 
 ### Try-It-Yourself: Managing Print Jobs
-http://linuxfoundation.s3-website-us-east-1.amazonaws.com/TIY/usingprintjobs/index.html
-Please take a look at the following Try-It-Yourself exercise: Managing Print Jobs.
+Please take a look at the following Try-It-Yourself exercise: [Managing Print Jobs](http://linuxfoundation.s3-website-us-east-1.amazonaws.com/TIY/usingprintjobs/index.html).
 
 ### How Does CUPS Work?
 
@@ -256,25 +275,25 @@ You can accomplish a wide variety of tasks using qpdf including:
 
 We are now going to demonstrate some of the capabilities of the QPDF utility for manipulating PDF files.
 
-First, let's combine two files into one longer file: ```$ qpdf --empty --pages 1.pdf 2.pdf -- 12.pdf```
+First, let's **combine two files** into one longer file: ```$ qpdf --empty --pages 1.pdf 2.pdf -- 12.pdf```
 
-Now suppose I want to split off a couple of pages from one of the files into a separate file.
+Now suppose I want to **split off a couple of pages from one of the files** into a separate file.
 Well, I can do that with ```$ qpdf --empty --pages 1.pdf 1-2 -- new.pdf```
 So the new one only contains the first two pages.
 
-Suppose I want to rotate the first page by 90 degrees and leave the other pages the same.
+Suppose I want to **rotate** the first page by 90 degrees and leave the other pages the same.
 Then I do ```$ qpdf --rotate=+90:1 1.pdf 1r.pdf``` to indicate it's just page 1, '1.pdf' and the output will go into '1r.pdf'.
 
 If I want to rotate all the pages I could do ```$ qpdf --rotate=+90:1-z 1.pdf 1rall.pdf```, where "z" means all pages, '1.pdf' and the output will go to '1rall.pdf'.
 
-And then finally, let's encrypt a file with a password that we give.
+And then finally, let's **encrypt a file** with a password that we give.
 So do ```$ qpdf --encrypt mypw mypw 128 -- public.pdf private.pdf``` and then 'mypw' for the password itself.
 I will specify a 128-bit encryption and then '-- public.pdf', that's the original name.
 It will be encrypted to a file named 'private.pdf,' and that worked just fine.
 And then when I try to open the file, if I just do 'evince private.pdf', it's asking me for the password.
 I type 'mypw'. And I can read it, so that's just fine.
 
-And then, if I want to decrypt it and make a copy which is no longer encrypted, I can do ```$ qpdf --decrypt --password=mypw private.pdf file-decrypted.pdf``` and then the output will be 'file-decrypted.pdf'.
+And then, if I want to **decrypt** it and make a copy which is no longer encrypted, I can do ```$ qpdf --decrypt --password=mypw private.pdf file-decrypted.pdf``` and then the output will be 'file-decrypted.pdf'.
 And I can look at that without having to supply a password.
 
 
