@@ -324,20 +324,23 @@ Make sure you can read the resulting **PDF** file. Does it look identical to the
 
 **Solution 10.2**:
 
-1. Try:
+1. Check to see if the **enscript** package has been installed on your system, and if not, install it. 
+Try:
 ```
 $ which enscript
 /usr/bin/enscript
 ```
 If you do not get a positive result, install with whichever command is appropriate for your Linux distribution:```$ [ apt-get | dnf | yum | zypper ] install enscript```
 
-2.
+2.Using **enscript**, convert the text file **/var/dmesg** to **PostScript** format and name the result **/tmp/dmesg.ps**
+
 ```
 $ enscript -p /tmp/dmesg.ps /var/log/dmesg
 $ evince /tmp/dmesg.ps
 ```
 
-3.
+3.Convert the **PostScript** document to **PDF** format using **ps2pdf**
+
 ```
 $ ps2pdf /tmp/dmesg.ps
 $ ls -lh /var/log/dmesg /tmp/dmesg.ps /tmp/dmesg.pdf
@@ -348,7 +351,8 @@ $ evince /tmp/dmesg.ps /tmp/dmesg.pdf
 ```
 Note the difference in sizes. **PostScript** files tend to be large, while **PDF** is a compressed format.
 
-4.
+4. Is there a way you can go straight to the **PDF** file without producing a **PostScript** file on the disk along the way?
+
 You may want to scan the man pages for enscript and ps2pdf to figure out how to use standard input or standard output instead of files.
 
 ```
@@ -361,7 +365,8 @@ $ ls -l dmesg*pdf
 -rw-rw-r-- 1 coop coop 28177 Apr 22 13:00 dmesg.pdf
 ```
 
-5.
+5. Using **pdfinfo**, determine what PDF version is used to encode the file, the number of pages, the page size, and other metadata about the file.
+
 ```
 c7:/tmp>pdfinfo dmesg.pdf
 Title:         Enscript Output
