@@ -253,7 +253,30 @@ You can accomplish a wide variety of tasks using qpdf including:
 <img src="images/chapter10_19.png"/>
 
 ### Demo: Using qpdf
-TODO
+
+We are now going to demonstrate some of the capabilities of the QPDF utility for manipulating PDF files.
+
+First, let's combine two files into one longer file: ```$ qpdf --empty --pages 1.pdf 2.pdf -- 12.pdf```
+
+Now suppose I want to split off a couple of pages from one of the files into a separate file.
+Well, I can do that with ```$ qpdf --empty --pages 1.pdf 1-2 -- new.pdf```
+So the new one only contains the first two pages.
+
+Suppose I want to rotate the first page by 90 degrees and leave the other pages the same.
+Then I do ```$ qpdf --rotate=+90:1 1.pdf 1r.pdf``` to indicate it's just page 1, '1.pdf' and the output will go into '1r.pdf'.
+
+If I want to rotate all the pages I could do ```$ qpdf --rotate=+90:1-z 1.pdf 1rall.pdf```, where "z" means all pages, '1.pdf' and the output will go to '1rall.pdf'.
+
+And then finally, let's encrypt a file with a password that we give.
+So do ```$ qpdf --encrypt mypw mypw 128 -- public.pdf private.pdf``` and then 'mypw' for the password itself.
+I will specify a 128-bit encryption and then '-- public.pdf', that's the original name.
+It will be encrypted to a file named 'private.pdf,' and that worked just fine.
+And then when I try to open the file, if I just do 'evince private.pdf', it's asking me for the password.
+I type 'mypw'. And I can read it, so that's just fine.
+
+And then, if I want to decrypt it and make a copy which is no longer encrypted, I can do ```$ qpdf --decrypt --password=mypw private.pdf file-decrypted.pdf``` and then the output will be 'file-decrypted.pdf'.
+And I can look at that without having to supply a password.
+
 
 ### Using pdftk
 
