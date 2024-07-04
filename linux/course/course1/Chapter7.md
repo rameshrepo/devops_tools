@@ -61,7 +61,36 @@ You can easily revert to the state described by earlier snapshots and even induc
 For a review of the development history of Btrfs and an analysis of its current state and expected evolution read the ["Kernel development"](https://lwn.net/Articles/575841/) article by LWN.net, and the following articles in the series.
 
 ### Demo: Using Available Filesystems
-TODO
+
+At any given time, you can see what filesystems your system currently understands by doing ```cat /proc/filesystems```. Let's pipe that into ‘less’.
+<img src="images/chapter7_2.png"/>
+The ‘nodev’ ones are so-called pseudo-filesystems, but then, we see more conventional ones down here, like ‘ext3’, ‘btrfs’, ‘fuse’, ‘ext4’, etc.
+
+You will notice that ‘xfs’ was not on the list, and the kernel would understand how to do it if it were to load it as a module, but it is not currently built into the system.
+So, let's see what happens if we try to prepare and mount an ‘xfs’ filesystem.
+In order to do that, we will use the loopback mechanism.
+So first, let's create a container for the filesystem.
+
+<img src="images/chapter7_3.png"/>
+So, do ‘dd if=/dev/zero’, to fill it with zeroes, ‘of=junk’, just to give any name, ‘bs=1M count=512’, so we will make a 512MB file full of zeroes.
+
+<img src="images/chapter7_4.png"/>
+And now, we will put a filesystem on it with ‘mkfs.xfs junk’.
+
+<img src="images/chapter7_5.png"/>
+That seems to have worked just fine. And now, we will mount it, so I will do ```$ sudo mount junk /mnt```.
+Notice, we did not have to say what type of filesystem it is. Mount was able to figure it out by examining what is actually in ‘junk’.
+Furthermore, we did not have to specify ‘-o loop’. The system was smart enough to figure out this was a loopback file and we did not have to explicitly say it.
+
+<img src="images/chapter7_6.png"/>
+So, if I do ‘df’, you will see there it is. It is mounted on ‘/mnt’. Not much of it is being used.
+
+<img src="images/chapter7_7.png"/>
+If I do ‘cat /proc/filesystems’ now, we will see ‘xfs’ is now understood.
+
+<img src="images/chapter7_7.png"/>
+And if I do ```$ lsmod```, we will see that the ‘xfs’ module is loaded now. I should have shown you, it was not loaded before we tried to mount an ‘xfs’ filesystem, but it was indeed not.
+
 
 ### Mounting Filesystems
 
