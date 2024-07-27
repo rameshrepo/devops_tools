@@ -171,7 +171,36 @@ There are many advantages to using LVM. In particular, it becomes really easy to
 Performance changes do occur. There is a definite additional cost that comes from the overhead of the LVM layer. However, even on non-RAID systems, if you use striping in the setup, you can achieve some parallelization improvements. Such striping does no good if it is within the same physical disk, however.
 
 ### Demo: Working with LVM
-TODO
+Let's get some practice examining our LVM setup, and doing things like creating a new logical volume, and putting a filesystem on it, etc.
+So first, let's see what physical volumes are in use on our system.
+We can do that with ‘sudo pvdisplay | grep sd’.
+
+
+And you will see, these are the different hard disk partitions being used as physical volumes, and being used in the volume groups.
+So, we see, we have both ‘sdb’ and ‘sda’. On this system, ‘sda’ is an old-fashioned rotational hard disk.
+‘sdb’, as in SSD, which is much faster, so we try to put high-performance sensitive data on ‘sdb’.
+If I just type ‘sudo pvdisplay’, just looking at ‘sd’, I get information about each volume on the system.
+So, you will see exactly how big each one is. For instance, ‘sda2’ is 500GB in size.
+And, the extents, or the units in which the physical volume is trunked up are 4 megabytes, which is what is called a ‘PE’.
+If I want to see what volumes are on the system, I can do ‘sudo vgdisplay’, and once again, just to get a quick idea, I’ll say ‘Name’ [sudo vgdisplay | grep Name].
+And, you will see, there are volume groups ‘VG’ and ‘VG2’. And then, I can get more information, if I just do ‘sudo vgdisplay’.
+And so, you see ‘VG2’, for instance, currently has 426GB free, out of a total of 1.05TB on that disk.
+If I want to see what logical volumes I have on my system, I can do ‘sudo lvdisplay’, and I can grep that with ‘Path’.
+Those are the different logical volumes that are on the system.
+If I just try ‘sudo lvdisplay’, I get details about each logical volume that is on the system.
+So, I notice, I left, from a previous attempt, ‘newLV’, which is what I want to create in here, so let me get rid of that first.
+So, I do ‘sudo lvremove /dev/VG2/newLV’. It is asking me whether I really want to do that. And I will say, ‘yes’. And, it is removed.
+So, let's go through the process though, of recreating it. So, I do ‘sudo lvcreate -L 4G’ I want it to be 4 gigabytes in size, I want the name to be ‘newLV’, and I am going to put it on ‘VG2’ [sudo lvcreate -l 4G -n newLV VG2].
+So, that is created, but it is not really usable yet, unless I put a filesystem on it.
+So, I will do ‘sudo mkfs’ and let’s just make it an ‘ext4’ filesystem ‘/dev/VG2/newLV’ [sudo mkfs.ext4 /dev’VG2/newLV]. It is writing a new filesystem on there.
+And then, I can mount it and use it, etc. So, let me just mount it ‘sudo mount /dev/VG2/newLV’ and I will put that on ‘/mnt’ [sudo mount /dev/VG2/newLV /mnt].
+And, I can verify it is really there. And, you will see at the bottom here, it is 3.9GB and only 16MB are actually used at the moment.
+And then, finally, let me remove it, ‘sudo lvremove /dev/VG2/newLV’.
+I did not unmount it first, so it will not let me remove it. So, the system is being smart.
+So, I will do ‘sudo umount /mnt’. And then, I will try to remove it again. It says, do you really want to do it? And I say, ‘yes’.
+So, that is basic commands for manipulating logical volumes on the LVM system.
+
+
 
 ### Lab 7.1. Loopback Filesystems
 

@@ -95,7 +95,7 @@ where the s stands for substitute. If you want to change all instances, you have
 
 Some of the complications come in when you want to use special characters in the strings to be searched for or inserted. For example, suppose you want to replace all back slashes with forward slashes: ```$ sed s/'\\'/'\/'/g file > newfile```
 
-If you want to make multiple simultaneous substitutions, you need to use the -e option, as in:```$ sed -e s/"pig"/"cow"/g -e s/"dog"/"cat"/g < file > newfile```
+If you want to make **multiple simultaneous substitutions**, you need to use the **-e option**, as in:```$ sed -e s/"pig"/"cow"/g -e s/"dog"/"cat"/g < file > newfile```
 
 You can work directly on streams generated from commands, as in:
 ```
