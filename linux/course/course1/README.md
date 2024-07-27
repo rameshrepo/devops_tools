@@ -4,7 +4,7 @@
 
 | Index  | Description |
 | ------------- | ------------- |
-| Chapter 1  | Essential Command line tools  |
+| Chapter 1  | [Essential Command line tools](https://github.com/rameshrepo/devops_tools/blob/main/linux/course/course1/Chapter1.md)  |
 | Chapter 2  | File and Text Manipulation Utilities  |
 | Chapter 3  | Bash Scripting  |
 | Chapter 4  | Networking  |
