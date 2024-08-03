@@ -1,15 +1,15 @@
 ## Redhat Package Management (RPM)
 
-RPM (Red Hat Package Manager) is the underlying package management system used in **Red Hat-based Linux distributions like Fedora, CentOS, and RHEL**.
+RPM (Red Hat Package Manager) is the underlying package management system used in **Red Hat-based Linux distributions like Fedora, CentOS, and RHEL**. OpenSUSE, Almalinux, and Rocky Linux to name a few.
 
 RPM knows what its dependencies are, and has the ability to **download software from ftp and web servers.** The thing that's missing is a repository-centric view. **RPM does not manage software collections in remote repositories.** 
 Because of this limitation, RPM cannot install the dependencies.
 
-RPM is the **package file format**
+**RPM (.rpm files) is the ```package file format```**
+
+### About Yum
 
 **Yum resolves dependencies automatically**. This means it downloads and installs all software packages necessary. This includes packages that the user didn't specify if the chosen package requires them. **It will be time-consuming and changes of messing up, if need to install the each RPM package and it's dependencies individually**
-
-Source: https://www.hows.tech/2024/02/rpm-vs-yum-what-is-difference-between.html#google_vignette
 
 **Yum uses RPM and Yum sits on top of RPM**. **Yum repositories contain RPM software packages**. The Yum client maintains a local list of software repositories. Users can add repositories by just adding a new Yum configuration file for them. 
 
@@ -21,9 +21,9 @@ Yum has the concept of software package groups. A group is a list of software th
 
 ### Advantage of Yum over vanilla RPM
 
-- YUM simplifies package management by automatically resolving dependencies when installing or removing packages.
+- Yum simplifies package management by automatically resolving dependencies when installing or removing packages.
 - It maintains a repository of software packages and their dependencies, allowing users to easily install, update, or remove software with a single command.
-- With the "rpm" command, you need to know the exact location of the .rpm package. But with "yum", you just need to know the name of it, and as long as it's available through your repositories list, it will be installed along with its dependencies. (Note: The dependencies will be downloaded from the remote repositories even if the .rpm file is not locally available.)
+- With the "rpm" command, you **need to know the exact location of the .rpm package**. But with "yum", you just need to know the name of it, and as long as it's available through your repositories list, it will be installed along with its dependencies. (Note: The dependencies will be downloaded from the remote repositories even if the .rpm file is not locally available.)
 
 ### References
 - [RPM Based Linux Distributions](https://en.wikipedia.org/wiki/Category:RPM-based_Linux_distributions)
