@@ -1,5 +1,7 @@
 ## Redhat Package Management (RPM)
 
+### Introduction
+
 RPM (Red Hat Package Manager) is the underlying package management system used in **Red Hat-based Linux distributions like Fedora, CentOS, and RHEL**. OpenSUSE, Almalinux, and Rocky Linux to name a few.
 
 RPM knows what its dependencies are, and has the ability to **download software from ftp and web servers.** The thing that's missing is a repository-centric view. **RPM does not manage software collections in remote repositories.** 
@@ -25,7 +27,7 @@ Yum has the concept of software package groups. A group is a list of software th
 - It maintains a repository of software packages and their dependencies, allowing users to easily install, update, or remove software with a single command.
 - With the "rpm" command, you **need to know the exact location of the .rpm package**. But with "yum", you just need to know the name of it, and as long as it's available through your repositories list, it will be installed along with its dependencies. (Note: The dependencies will be downloaded from the remote repositories even if the .rpm file is not locally available.)
 
-### Summary
+### Summary of Yum and Yum Groups
 
 About Yum:
 - Yum uses RPM to install packages on Red Hat-like distributions
@@ -148,6 +150,28 @@ Dependency Installed:
 
 Complete!
 ```
+
+### Query packages using RPM
+
+RPM is used to install local software packages. Once a package is installed, the RPM package database is updated with the package information. **We can query that package database. We can also query a package directly even if it isn't installed**.
+
+**RPM Query**
+
+- Query Database
+  - List of installed packages: ```rpm -qa``` (-q for query and -a for all)
+  - List of installed packages (sorted by alphabetical): ```rpm -qa | sort```
+  - Search for a package: ```rpm -qa | grep <search_term>``` (example: ```rpm -qa | grep httpd```)
+  - List packages by installation date: ```rpm -qa --last```
+  - Get information on an installed package: ```rpm -qi httpd```
+  - List where all files of a package is installed: ```rpm -ql httpd```
+  - List where all documentation of a package is installed: ```rpm -qd httpd```
+  - Know which package the file(/bin/bash) came from: ```rpm -qf /bin/bash```
+  - Check changes to the installed package: ```rpm -q --changelog httpd```
+- Query Package
+- Query File
+
+
+
 
 ### References
 - [RPM Based Linux Distributions](https://en.wikipedia.org/wiki/Category:RPM-based_Linux_distributions)
